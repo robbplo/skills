@@ -1,0 +1,11 @@
+{
+  "name": "robbplo-skills",
+  "owner": { "name": "robbin" },
+  "plugins": [
+    {
+      "name": "pstack",
+      "source": "./",
+      "description": "Personal skills, forked from pstack"
+    }
+  ]
+}
