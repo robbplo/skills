@@ -5,6 +5,8 @@ description: Configure which models pstack uses per role and at what reasoning b
 
 # Setup pstack
 
+Before executing, read the [host contract](../../docs/harness/README.md) and active host adapter. In Codex and Pi, use the adapter's setup procedure instead of the Cursor procedure below.
+
 Write an always-applied rule that sets pstack's model per role. The file depends on the harness:
 
 - **Cursor**: `~/.cursor/rules/pstack-models.mdc`, with frontmatter.

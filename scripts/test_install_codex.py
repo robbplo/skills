@@ -19,7 +19,8 @@ class InstallCodexTest(unittest.TestCase):
         for folder in ('scripts', 'skills', 'agents', 'docs/harness', 'assets'):
             (self.source / folder).mkdir(parents=True)
         shutil.copy2(Path(__file__).with_name('install-codex.py'), self.source / 'scripts/install-codex.py')
-        (self.source / 'docs/harness/codex.md').write_text('Codex adapter.\n')
+        for name in ('README.md', 'codex.md', 'pi.md', 'claude-code.md'):
+            (self.source / 'docs/harness' / name).write_text('Host instructions.\n')
         (self.source / 'README.md').write_text('Bundled setup help.\n')
         self.write_skill('alpha')
         self.write_skill('obsolete')
@@ -89,6 +90,13 @@ class InstallCodexTest(unittest.TestCase):
         self.assertIn(str(self.pack / 'docs/harness/codex.md'), skill)
         self.assertTrue((self.catalog / 'alpha').samefile(self.pack / 'skills/alpha'))
         self.assertEqual((self.pack / 'skills/alpha/agents/openai.yaml').read_text(), 'policy:\n  allow_implicit_invocation: false\n')
+
+    def test_missing_contract_preserves_pack_and_catalog(self):
+        self.assert_installs()
+        before = self.snapshot()
+        (self.source / 'docs/harness/README.md').unlink()
+        self.assertNotEqual(self.run_install().returncode, 0)
+        self.assertEqual(self.snapshot(), before)
 
     def test_malformed_update_preserves_pack_and_catalog(self):
         self.assert_installs()

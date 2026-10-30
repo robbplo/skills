@@ -4,6 +4,8 @@ description: "Fan out N parallel workers, drain them, and return one report. Use
 disable-model-invocation: true
 ---
 
+Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below.
+
 # Swarm
 
 ## Start

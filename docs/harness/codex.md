@@ -16,7 +16,7 @@ only the symlinks pointing into `~/.codex/pstack-local/skills`, then that pack.
 
 ## Runtime adapter
 
-Read this adapter before following any pstack skill. These mappings supersede
+Read the [host contract](README.md), then this adapter when the active host is Codex. A Pi session discovering this shared installation uses the Pi adapter instead. These mappings supersede
 Cursor-specific instructions in the bundled skills, playbooks, and agent briefs.
 `<pstack>` is the installed directory containing this file's `docs/` ancestor.
 Never invent tool fields or claim an unavailable feature ran.

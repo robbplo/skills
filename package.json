@@ -1,0 +1,12 @@
+{
+  "name": "pstack-skills",
+  "private": true,
+  "description": "Portable engineering skills for coding agents",
+  "keywords": ["pi-package"],
+  "pi": {
+    "skills": ["./skills"],
+    "extensions": [],
+    "prompts": [],
+    "themes": []
+  }
+}

@@ -1,6 +1,6 @@
 # pstack
 
-my personal skills repo. it's a fork of [pstack](https://github.com/cursor/plugins/tree/main/pstack), the skill pack [poteto](https://x.com/poteto) built for Cursor. the skills, playbooks, and principles come from that work. i run them in claude code and codex, and i change them to fit how i work.
+my personal skills repo. it's a fork of [pstack](https://github.com/cursor/plugins/tree/main/pstack), the skill pack [poteto](https://x.com/poteto) built for Cursor. the skills, playbooks, and principles come from that work. i run them in Claude Code, Codex, and Pi, and i change them to fit how i work.
 
 the idea underneath is poteto's. if you want to go fast, go deep first. pstack helps agents write less, but higher quality code, so you can run several at once and trust what comes back.
 
@@ -9,7 +9,7 @@ the idea underneath is poteto's. if you want to go fast, go deep first. pstack h
 - it installs from my own repo, [robbplo/skills](https://github.com/robbplo/skills), not the upstream marketplace.
 - `deslop` is bundled, so `/deslop` works without another plugin.
 - steps that used to name a specific control skill now say "the control skill for that surface", and use whatever the environment provides.
-- the claude code and codex adapters are the main path.
+- a shared [host contract](./docs/harness/README.md) maps capabilities for Claude Code, Codex, Pi, and other agents. Cursor is optional.
 
 to pull in upstream changes, compare this tree with the upstream folder and take what i want.
 
@@ -25,6 +25,16 @@ in claude code:
 claude code leaves auto-update off for third-party marketplaces. to turn it on, run `/plugin`, open the **marketplaces** tab, select `robbplo-skills`, and choose **enable auto-update**. to update once by hand, run `claude plugin update pstack@robbplo-skills`. a push only reaches installed copies when `version` in the manifests changes, so bump it when you want an update to land.
 
 claude code prefixes plugin commands and agents, so `/poteto-mode` is `/pstack:poteto-mode`. the [claude code adapter](./docs/harness/claude-code.md) maps every other cursor name. in claude code, `/pstack:setup-pstack` writes your model choices to `~/.claude/rules/pstack-models.md`, and a step that needs a cursor-only feature, such as bugbot or automations, is skipped with a one-line note.
+
+## Pi install
+
+```bash
+pi install git:github.com/robbplo/skills
+```
+
+For a local checkout, use `pi install /absolute/path/to/skills`. Reload Pi, then run `/skill:poteto-mode <task>` or `/skill:setup-pstack`. No delegation extension is required; without one, work runs sequentially and independent-review gates remain unmet. See the [Pi adapter](./docs/harness/pi.md).
+
+Pi also discovers `~/.agents/skills`. If you already use the Codex installation below, use that shared copy instead of installing duplicate skills. Host selection follows the running agent, not the installation directory.
 
 ## local Codex install
 
@@ -46,9 +56,10 @@ The directory switch is recoverable, not atomic. Rerun after an interrupted swit
 Codex plans and cleanup commands use `--host codex` as documented in the adapter.
 Codex polling lasts only while the session remains active.
 
-Run the Codex regression checks before reinstalling.
+Run the portability and installer regression checks before reinstalling.
 
 ```bash
+python3 scripts/test_portability.py
 python3 scripts/test_install_codex.py
 python3 skills/poteto-mode/scripts/worktree-audit.test.py
 bun test skills/poteto-mode/scripts/check-plan.test.ts
@@ -63,13 +74,13 @@ two steps:
 
 new here? the [pstack guide](./docs/guide/README.md) walks you through a first real task, from setup and prompting through verification and overnight runs. stuck, or unsure which skill fits? ask [`/poteto-help`](./skills/poteto-help/SKILL.md).
 
-that's it. the other skills are situational, and the mode skill uses them for you as needed. out of the box the mode splits work by model strength: code delegates (feature, refactoring, bug fix, perf, hillclimb) go to grok, while the hardest changes, prose, and judgment go to opus 5.5. the default panel is opus 5.5 / grok. [`/setup-pstack`](./skills/setup-pstack/SKILL.md) changes any of it.
+that's it. the other skills are situational, and the mode skill uses them as needed. Codex and Pi inherit the current session model by default. Other hosts use their adapter's supported choices. Model diversity and parallel workers are used only when available; missing independent review is reported, not simulated. [`/setup-pstack`](./skills/setup-pstack/SKILL.md) configures supported role choices.
 
 ## usage
 
 use [`/poteto-mode`](./skills/poteto-mode/SKILL.md) at the start of a task. it reads your request, picks from a set of playbooks, and runs the other skills as the steps need them.
 
-pick `/poteto-mode` from the `/` menu before you type your task, so cursor attaches the skill to the message.
+Examples below use `/name` as shorthand: type `$name` in Codex, `/skill:name` in Pi, or `/pstack:name` in Claude Code. Any agent can also read the installed `skills/<name>/SKILL.md` directly. Cursor-only UI and automation examples are optional integrations, not installation requirements.
 
 ### just use [`/poteto-mode`](./skills/poteto-mode/SKILL.md)
 

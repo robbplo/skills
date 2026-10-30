@@ -4,6 +4,8 @@ description: "Use for \"automate me\", \"create/update/refresh my -mode skill\",
 disable-model-invocation: true
 ---
 
+Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below.
+
 # Automate me
 
 A guided flow for turning the user's working conventions into a skill agents will follow. The output is one `-mode` skill tailored to them (e.g. `jay-mode`, `priya-mode`).

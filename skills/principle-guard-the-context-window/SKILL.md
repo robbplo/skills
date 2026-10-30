@@ -4,6 +4,8 @@ description: "Apply when context is filling up: large outputs, long files, repea
 disable-model-invocation: true
 ---
 
+Before executing, read the [host contract](../../docs/harness/README.md) and active host adapter. They override host-specific examples below.
+
 # Guard the Context Window
 
 **Why:** Context overflow degrades reasoning quality, creates compression artifacts, and halts progress.

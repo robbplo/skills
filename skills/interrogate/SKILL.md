@@ -4,6 +4,8 @@ description: "Use for \"interrogate\", \"adversarial review\", \"multi-model rev
 disable-model-invocation: true
 ---
 
+Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below.
+
 # Interrogate
 
 Spawn one reviewer per configured model to adversarially review code changes. The adversarial signal comes from model diversity, not assigned personas. The deliverable is a synthesized verdict. Do NOT auto-apply changes.

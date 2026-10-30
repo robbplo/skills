@@ -77,6 +77,14 @@ class WorktreeAuditTests(unittest.TestCase):
         self.assertEqual(row['BUCKET'], 'verify-activity')
         self.assertFalse(self.rg_log.exists())
 
+    def test_portable_hosts_do_not_read_cursor_history(self):
+        for host in ('portable', 'pi', 'claude-code'):
+            with self.subTest(host=host):
+                row = self.row(self.audit('--host', host))
+                self.assertEqual(row['LAST_CHAT'], 'unknown')
+                self.assertEqual(row['BUCKET'], 'verify-activity')
+                self.assertFalse(self.rg_log.exists())
+
     def test_unspecified_host_stays_unknown_without_reading_cursor_history(self):
         row = self.row(self.audit())
         self.assertEqual(row['LAST_CHAT'], 'unknown')

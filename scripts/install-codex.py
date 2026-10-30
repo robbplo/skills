@@ -54,20 +54,21 @@ def render_pack(stage: Path, pack: Path):
     for folder in ('skills', 'agents', 'docs', 'assets'):
         shutil.copytree(SOURCE / folder, stage / folder)
     shutil.copy2(SOURCE / 'README.md', stage / 'README.md')
-    if not (stage / 'docs/harness/codex.md').is_file():
-        raise ValueError('Missing Codex adapter')
+    for adapter_name in ('README.md', 'codex.md', 'pi.md', 'claude-code.md'):
+        if not (stage / 'docs/harness' / adapter_name).is_file():
+            raise ValueError(f'Missing host contract or adapter: {adapter_name}')
     if (pack / 'models.md').is_file():
         shutil.copy2(pack / 'models.md', stage / 'models.md')
     (stage / MARKER).write_text(f'Source: {SOURCE}\n')
     adapter = pack / 'docs/harness/codex.md'
-    prelude = (f'## Codex host instructions\n\nBefore doing any work, read `{adapter}` '
-               'and apply its host mappings instead of Cursor/Claude-specific instructions below. '
-               f'Read `{pack / "models.md"}` if it exists. '
-               'Pass this adapter path to every delegate.\n\n')
+    prelude = (f'## Host instructions\n\nBefore doing any work, read `{pack / "docs/harness/README.md"}` '
+               'and select the active host adapter. This shared catalog may be loaded by Codex or Pi. '
+               f'Only in Codex, read `{adapter}` and `{pack / "models.md"}` if present. '
+               'Pass the contract and selected adapter paths to every delegate.\n\n')
     for name, (front, body) in parsed.items():
         explicit_only = 'disable-model-invocation: true' in front
         front = '\n'.join(line for line in front.splitlines() if not line.startswith(
-            ('disable-model-invocation:', 'user-invocable:', 'icon:', 'color:')))
+            ('user-invocable:', 'icon:', 'color:')))
         dest = stage / 'skills' / name / 'SKILL.md'
         dest.write_text('---\n' + front + '\n---\n\n' + prelude + body.lstrip())
         if explicit_only:

@@ -1,6 +1,6 @@
 # pstack in Claude Code
 
-pstack skills use Cursor names. In Claude Code, read this file once per session, then map each Cursor name in a skill with the tables below. `<pstack>` means the folder that holds `skills/` and `docs/`. If a Cursor field has no row, drop it and say so. Never pass a field or value the tool schema rejects.
+Read the [host contract](README.md) first. Some upstream workflow examples retain Cursor names. In Claude Code, read this file once per session, then map each Cursor name in a skill with the tables below. `<pstack>` means the folder that holds `skills/` and `docs/`. If a Cursor field has no row, drop it and say so. Never pass a field or value the tool schema rejects.
 
 ## Tools
 
@@ -57,7 +57,7 @@ Claude Code loads every `.md` file in `~/.claude/rules/` into each new session, 
 
 ## Cursor-only features
 
-Claude Code has no Cursor Automations, Bugbot, Cursor cloud agents, or built-in PR tool. When a step needs one, put one line in your reply, `Skipped in Claude Code: <step>. <reason>.`, then go on to the next step. Do not stop, ask, or retry. When a later step needs what the skipped step made, such as a URL or a key, leave a placeholder and name it in the line.
+Claude Code has no Cursor Automations, Bugbot, Cursor cloud agents, or built-in PR tool. When a step needs one, put one line in your reply, `Skipped in Claude Code: <step>. <reason>.`, then go on to the next step. Continue only independent steps. If a later step needs what the skipped step made, such as a URL or a key, report that dependency as blocked; never submit a placeholder as a real result.
 
 | Cursor | Claude Code |
 | --- | --- |

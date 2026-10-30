@@ -4,6 +4,8 @@ description: Guides users through pstack setup, /poteto-mode, and picking the sk
 disable-model-invocation: true
 ---
 
+Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below. Installation and command syntax come from the installed README and adapter, not the Cursor examples.
+
 # Poteto help
 
 Answer the user's question about pstack, hand them a prompt they can send, and link the file the answer came from. For a help question, don't start the work. The user asked how, and a pstack run spends real tokens, so let them send the prompt.
@@ -24,7 +26,7 @@ Infer the need from the message and the conversation. A named situation, such as
 
 Check the state that changes the answer, and mention it only when it does:
 
-- No `~/.cursor/rules/pstack-models.mdc` means `/setup-pstack` hasn't run for this user, so every role uses its default model.
+- Check the active adapter's model configuration path. If absent, explain the host's defaults and offer setup; do not inspect another host's rules.
 - No `verify-*` skill or other app harness in the project means agents have no scripted way to drive the app. Mention `/create-verification-skill` when the question is about proving a change works.
 - No formal verification skill in the project means no property is checked past what tests reach. Mention `/create-formal-verification-skill` when the question is about a race, an invariant, or another case tests rarely hit. When one exists and the code it covers changed after the commit it records as last in sync, mention `/maintain-formal-verification-skill` if the question touches that code.
 
@@ -35,7 +37,7 @@ When the model rule is missing and it matters, ask whether the user wants to pic
 
 ## Get set up
 
-1. Install with `/add-plugin pstack` in chat, or from Customize in the sidebar.
+1. Follow the installed README's instructions for the user's host.
 2. Run [`/setup-pstack`](../setup-pstack/SKILL.md). It asks for a reasoning budget, maps a model to each role, and writes a rule. The rule applies to new chats. Then it offers once each to generate a verification skill and a formal verification skill for the project, unless the project already has one.
 3. Start a real task with `/poteto-mode`, a goal, and a check that can pass or fail.
 
@@ -43,9 +45,9 @@ Installing changes nothing until the user invokes a skill. Only `/setup-pstack` 
 
 If cost is the worry, say where the tokens go and how to spend fewer. pstack spends extra tokens on subagents and review panels. Rerun `/setup-pstack` and pick a smaller budget or cheaper models. A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on Auto or a cheaper model. A shorter panel list runs fewer subagents, one for each entry. Save `/poteto-mode` for work that needs rigor.
 
-pstack is built for Cursor, and it also installs in Claude Code with `/plugin marketplace add robbplo/skills`, then `/plugin install pstack@robbplo-skills`. There, each command takes a `pstack:` prefix, such as `/pstack:poteto-mode`. The [Claude Code adapter](../../docs/harness/claude-code.md) maps the Cursor names, and a step that needs a Cursor-only feature, such as Bugbot or Automations, is skipped with a one-line note.
+pstack supports Codex, Pi, and Claude Code through the [host contract](../../docs/harness/README.md). Use the installed [README](../../README.md) for installation. User commands are `$name` in Codex, `/skill:name` in Pi, and `/pstack:name` in Claude Code. Other agents can read each `SKILL.md` directly.
 
-Other tools can read the skills, because they use the Agent Skills format. But most workflow skills, including `/poteto-mode`, `/how`, `/why`, and `/teach`, spawn Cursor subagents with per-role models, and Custom Modes and `/loop` are Cursor features, so those parts may not work there.
+Parallel workers, model selection, and persistent wakes depend on the active host's tools. Without workers, run separable steps sequentially and disclose unmet independent-review gates. Cursor integrations are optional; a missing capability blocks only work that depends on it.
 
 ## Start a task with `/poteto-mode`
 

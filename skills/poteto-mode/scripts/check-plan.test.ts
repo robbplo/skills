@@ -73,6 +73,14 @@ test("accepts a Codex plan with installed sources and in-session polling", () =>
 	runPlan("", 0, codexPlan, ["--host", "codex"]);
 });
 
+test("portable hosts accept installed-source plans and reject Cursor commands", () => {
+	for (const host of ["portable", "pi", "claude-code"]) {
+		runPlan("", 0, codexPlan, ["--host", host]);
+		const plan = codexPlan.replace("### Arm the program", "### Arm the program\n- [ ] Run `/loop 1h`.");
+		expect(runPlan("", 1, plan, ["--host", host]).stderr).toContain(`unsupported in ${host}`);
+	}
+});
+
 test("requires each Codex program instruction", () => {
 	for (const marker of ["Read installed playbooks.", "Wake mechanism.", "status message"]) {
 		const result = runPlan("", 1, codexPlan.replace(marker, "Removed instruction."), ["--host", "codex"]);

@@ -4,6 +4,8 @@ description: "Use for \"how does X work\", code walkthroughs before changing som
 disable-model-invocation: true
 ---
 
+Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below.
+
 # How
 
 Explore the codebase to answer "how does X work?" questions. Produce architectural explanations at the level of a senior engineer onboarding onto a subsystem, enough to build a working mental model, not so much that it reads like annotated source code.
