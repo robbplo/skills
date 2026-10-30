@@ -4,8 +4,6 @@ description: "Apply during planned rewrites and migrations with explicit phase b
 disable-model-invocation: true
 ---
 
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
-
 # Outcome-Oriented Execution
 
 Optimize for the intended, verifiable end state rather than preserving smooth intermediate states.

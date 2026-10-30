@@ -4,8 +4,6 @@ description: Cut AI tells from any writing.
 disable-model-invocation: true
 ---
 
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
-
 # Unslop
 
 Edit text to remove AI patterns. Scan for the patterns below, then rewrite. Preserve meaning and match the intended tone.

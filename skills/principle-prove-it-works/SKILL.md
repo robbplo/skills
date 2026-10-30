@@ -4,8 +4,6 @@ description: "Apply after completing a task, before declaring done. Verify again
 disable-model-invocation: true
 ---
 
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
-
 # Prove It Works
 
 Verify every task output by checking the real thing directly. Do not infer from proxies, self-reports, or "it compiles."

@@ -1,10 +1,8 @@
 ---
 name: technical-writing
-description: "Layered technical-writing standard: Diátaxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages."
+description: "Layered technical-writing standard: Diátaxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /pstack:technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages."
 disable-model-invocation: true
 ---
-
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
 
 # Technical writing
 

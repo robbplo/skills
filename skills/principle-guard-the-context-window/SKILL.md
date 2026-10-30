@@ -4,8 +4,6 @@ description: "Apply when context is filling up: large outputs, long files, repea
 disable-model-invocation: true
 ---
 
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
-
 # Guard the Context Window
 
 **Why:** Context overflow degrades reasoning quality, creates compression artifacts, and halts progress.

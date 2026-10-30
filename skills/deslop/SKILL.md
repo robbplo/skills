@@ -3,8 +3,6 @@ name: deslop
 description: Remove AI-generated code slop and clean up code style
 ---
 
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
-
 # Remove AI code slop
 
 Check the diff against main and remove AI-generated slop introduced in the branch.

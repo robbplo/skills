@@ -4,8 +4,6 @@ description: "Apply when introducing a new internal API while old callers still 
 disable-model-invocation: true
 ---
 
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
-
 # Migrate Callers Then Delete Legacy APIs
 
 - Update tests to assert the new contract, and delete tests that only protect pre-refactor implementation details

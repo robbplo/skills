@@ -4,13 +4,11 @@ description: "Use for \"how does X work\", code walkthroughs before changing som
 disable-model-invocation: true
 ---
 
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
-
 # How
 
 Explore the codebase to answer "how does X work?" questions. Produce architectural explanations at the level of a senior engineer onboarding onto a subsystem, enough to build a working mental model, not so much that it reads like annotated source code.
 
-Every spawn is a Task subagent with `subagent_type: generalPurpose` and `readonly: true`. Explorers use the `how explorer` line in the `pstack-models.mdc` rule (default `grok-4.7-xhigh-fast`), and every explainer uses the `how explainer` line (default `claude-opus-5-5-xhigh`). Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Task tool rejects a slug, use the default and say so. If it rejects the default, use the closest valid slug of the same family from its error message. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
+Every spawn is an `Agent` subagent with `subagent_type: "Explore"`. Tell it not to edit files and check `git status` afterward. Explorers use the `how explorer` line in the `~/.claude/rules/pstack-models.md` rule (default `inherit-parent`), and every explainer uses the `how explainer` line (default `opus xhigh`). Set `model` and `effort` from that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
 ## 1. Assess complexity
 

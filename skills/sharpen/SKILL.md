@@ -1,10 +1,8 @@
 ---
 name: sharpen
-description: "Make a task deeper, not bigger, then rewrite the prompt. Use for /sharpen."
+description: "Make a task deeper, not bigger, then rewrite the prompt. Use for /pstack:sharpen."
 disable-model-invocation: true
 ---
-
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
 
 I want a deeper version of this task, not a bigger one. Before rewriting it, do four things:
 

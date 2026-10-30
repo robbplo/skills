@@ -4,8 +4,6 @@ description: "Apply to multi-step work (sweeps, migrations, runs of similar edit
 disable-model-invocation: true
 ---
 
-In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
-
 # Sequence work into verifiable units
 
 Order work as a sequence of small units, each ending in a state you can check, and don't advance until the current one is green.
