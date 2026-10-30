@@ -58,7 +58,7 @@ def render_pack(stage: Path, pack: Path):
     for folder in ('skills', 'agents', 'docs', 'assets'):
         shutil.copytree(SOURCE / folder, stage / folder)
     shutil.copy2(SOURCE / 'README.md', stage / 'README.md')
-    for adapter_name in ('README.md', 'codex.md', 'pi.md', 'claude-code.md'):
+    for adapter_name in ('README.md', 'codex.md', 'claude-code.md'):
         if not (stage / 'docs/harness' / adapter_name).is_file():
             raise ValueError(f'Missing host contract or adapter: {adapter_name}')
     if (pack / 'models.md').is_file():

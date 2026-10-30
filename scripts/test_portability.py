@@ -11,7 +11,7 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-HOST_LABELS = {'codex': 'Codex', 'pi': 'Pi', 'claude-code': 'Claude Code'}
+HOST_LABELS = {'codex': 'Codex', 'claude-code': 'Claude Code'}
 sys.dont_write_bytecode = True
 
 
@@ -58,13 +58,7 @@ class PortabilityTest(unittest.TestCase):
                                  installer.skill_frontmatter(installed)[1].strip())
                 if 'disable-model-invocation: true' in source.read_text():
                     self.assertIn('disable-model-invocation: true', text)
-            self.assertTrue((pack / 'docs/harness/pi.md').is_file())
             self.assertIn('## Codex runtime rules', (home / '.codex/AGENTS.md').read_text())
-
-    def test_pi_manifest_limits_discovery(self):
-        manifest = json.loads((ROOT / 'package.json').read_text())
-        self.assertEqual(manifest['pi'], {
-            'skills': ['./skills'], 'extensions': [], 'prompts': [], 'themes': []})
 
     def test_versions_match(self):
         versions = [json.loads((ROOT / path).read_text())['version'] for path in
@@ -76,7 +70,7 @@ class PortabilityTest(unittest.TestCase):
             plan = Path(directory) / 'plan.md'
             plan.write_text('# Incomplete plan\n')
             outputs = []
-            for host in ('codex', 'portable', 'pi', 'claude-code'):
+            for host in ('codex', 'portable', 'claude-code'):
                 result = subprocess.run(['node', str(ROOT / 'skills/poteto-mode/scripts/check-plan.mjs'),
                                          '--host', host, str(plan)], capture_output=True, text=True)
                 self.assertEqual(result.returncode, 1, result.stderr)
@@ -130,9 +124,6 @@ class InstructionsTest(unittest.TestCase):
                 self.assertEqual(target.stat().st_mtime_ns, before)
                 if host == 'codex':
                     self.assertLess(len(first.encode()), 24 * 1024)  # leave room in Codex's 32KiB context budget
-                if host == 'pi':
-                    self.assertIn('`.pi/skills/`', first)
-                    self.assertNotIn('.codex/pstack-local', first)
 
     def test_preserves_outside_prose_and_file_mode(self):
         begin, end = instructions.BEGIN, instructions.END
@@ -162,10 +153,10 @@ class InstructionsTest(unittest.TestCase):
                           ' ' + begin + '\n' + end,
                           begin.replace(' -->', '-->') + '\n' + end):
             with self.subTest(malformed=malformed):
-                self.put(malformed, 'pi')
+                self.put(malformed, 'claude-code')
                 before = self.snapshot()
                 with self.assertRaises(ValueError):
-                    instructions.install(self.home, ['codex', 'pi'])
+                    instructions.install(self.home, ['codex', 'claude-code'])
                 self.assertEqual(self.snapshot(), before)
 
     def test_symlink_file_and_parent_refused_without_mutation(self):
@@ -234,12 +225,11 @@ class InstructionsTest(unittest.TestCase):
 
     def test_cli_host_selection_and_pack_override(self):
         result = subprocess.run([sys.executable, str(ROOT / 'scripts/install-instructions.py'),
-                                 '--home', str(self.home), '--host', 'pi', '--pack', str(ROOT)],
+                                 '--home', str(self.home), '--host', 'claude-code', '--pack', str(ROOT)],
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn(f'The installed pack is `{ROOT}`.', self.target('pi').read_text())
+        self.assertIn(f'The installed pack is `{ROOT}`.', self.target('claude-code').read_text())
         self.assertFalse(self.target('codex').exists())
-        self.assertFalse(self.target('claude-code').exists())
 
     def test_codex_instruction_write_failure_rolls_back_pack(self):
         installer.install(self.home)

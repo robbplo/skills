@@ -8,10 +8,9 @@ Install for your agent, choose supported models, and run a first task. Cursor is
 |---|---|---|
 | Claude Code | `/plugin marketplace add robbplo/skills`, then `/plugin install pstack@robbplo-skills` | `/pstack:poteto-mode <task>` |
 | Codex | From this checkout: `python3 scripts/install-codex.py` | `$poteto-mode <task>` |
-| Pi | `pi install git:github.com/robbplo/skills` (or `pi install /absolute/path/to/skills`) | `/skill:poteto-mode <task>` |
 | Other agents | Make this checkout's `skills/` discoverable using the host's skill settings | Read `skills/poteto-mode/SKILL.md` directly |
 
-Global compatibility instructions are a setup prerequisite, not a per-skill read. Codex's installer includes them. For Pi, run `python3 scripts/install-instructions.py --host pi --pack /absolute/installed/pack` from this checkout; for Claude Code, use `--host claude-code` with its installed pack path. This embeds the full shared and selected host rules in the host's global instruction file. See the [README](../../README.md#global-instruction-setup-required) for defaults, safety checks, and updates. Restart or reload the agent afterward. Pi discovery depends on the installed version and configuration. Use its package installation or native `~/.pi/agent/skills/` directory rather than assuming it scans Codex's catalog. Cursor users can still use the plugin and `/name` commands.
+Global compatibility instructions are a setup prerequisite, not a per-skill read. Codex's installer includes them. For Claude Code, use `--host claude-code` with its installed pack path. This embeds the full shared and selected host rules in the host's global instruction file. See the [README](../../README.md#global-instruction-setup-required) for defaults, safety checks, and updates. Restart or reload the agent afterward. Cursor users can still use the plugin and `/name` commands.
 
 Throughout this guide, `/name` is shorthand for the active agent's invocation syntax, not a command to execute in a shell.
 
@@ -20,23 +19,22 @@ Throughout this guide, `/name` is shorthand for the active agent's invocation sy
 Invoke `setup-pstack` using your agent's syntax. It follows the already-loaded global compatibility rules, checks the available delegation controls, and confirms role choices before writing configuration:
 
 - Codex: `<installed-pack>/models.md`.
-- Pi: `~/.config/pstack/models.md`.
 - Claude Code: `~/.claude/rules/pstack-models.md`.
 - Cursor: `~/.cursor/rules/pstack-models.mdc`.
 
-Codex and Pi inherit the session model by default. Only configure model and reasoning overrides that the actual worker tool supports. A panel list sets the number of independent workers, not a promise of multiple model families. Without delegation, the agent can do separable work sequentially, but cannot claim independent review.
+Codex inherits the session model by default. Only configure model and reasoning overrides that the actual worker tool supports. A panel list sets the number of independent workers, not a promise of multiple model families. Without delegation, the agent can do separable work sequentially, but cannot claim independent review.
 
-Re-run setup to change role choices. Setup offers once to generate a project verification skill and a formal verification skill if the project lacks them. Generated skills go into the active host's project skill directory (`.agents/skills/` for Codex, `.pi/skills/` for Pi, `.claude/skills/` for Claude Code). A verification skill must prove a real app journey before you rely on it.
+Re-run setup to change role choices. Setup offers once to generate a project verification skill and a formal verification skill if the project lacks them. Generated skills go into the active host's project skill directory (`.agents/skills/` for Codex, `.claude/skills/` for Claude Code). A verification skill must prove a real app journey before you rely on it.
 
 ## First task
 
-For example, in Pi:
+For example, in Codex:
 
 ```text
-/skill:poteto-mode fix the settings form losing edits when I switch tabs. Reproduce it, fix the cause, and verify the real form.
+$poteto-mode fix the settings form losing edits when I switch tabs. Reproduce it, fix the cause, and verify the real form.
 ```
 
-In Codex, replace `/skill:poteto-mode` with `$poteto-mode`; in Claude Code use `/pstack:poteto-mode`. The skill selects a playbook and routes to the other skills as needed. Use it at the start of each new task; do not rely on a host-specific persistent mode.
+In Claude Code use `/pstack:poteto-mode`. The skill selects a playbook and routes to the other skills as needed. Use it at the start of each new task; do not rely on a host-specific persistent mode.
 
 If cost is a concern, use fewer panel seats or supported cheaper workers, and reserve full workflows for work that needs rigor. Unsupported controls are reported rather than emulated.
 

@@ -1,6 +1,6 @@
 # pstack
 
-my personal skills repo. it's a fork of [pstack](https://github.com/cursor/plugins/tree/main/pstack), the skill pack [poteto](https://x.com/poteto) built for Cursor. the skills, playbooks, and principles come from that work. i run them in Claude Code, Codex, and Pi, and i change them to fit how i work.
+my personal skills repo. it's a fork of [pstack](https://github.com/cursor/plugins/tree/main/pstack), the skill pack [poteto](https://x.com/poteto) built for Cursor. the skills, playbooks, and principles come from that work. i run them in Claude Code and Codex, and i change them to fit how i work.
 
 the idea underneath is poteto's. if you want to go fast, go deep first. pstack helps agents write less, but higher quality code, so you can run several at once and trust what comes back.
 
@@ -31,27 +31,16 @@ claude code prefixes plugin commands and agents, so `/poteto-mode` is `/pstack:p
 Skills and agent briefs assume the full shared and host compatibility rules are already loaded. From this checkout, install only the hosts you use:
 
 ```bash
-python3 scripts/install-instructions.py --host pi --pack /absolute/path/to/installed/pstack
 python3 scripts/install-instructions.py --host claude-code --pack /absolute/path/to/installed/pstack
 # Codex setup is included in scripts/install-codex.py, or separately:
 python3 scripts/install-instructions.py --host codex
 ```
 
-The command manages a clearly marked section in `~/.pi/agent/AGENTS.md`, `~/.claude/CLAUDE.md`, or `~/.codex/AGENTS.md`, preserving all unrelated prose. It embeds the complete shared rules plus only the selected host's runtime rules with absolute pack paths. It refuses malformed/duplicate boundaries, symlinked files or parent directories, and hard-linked files; for Nix-managed instructions, update their source instead. It never modifies host settings. Restart/reload the host after setup. Delegates must receive the loaded rules as content or the global file path, since global instructions are not always inherited.
+The command manages a clearly marked section in `~/.claude/CLAUDE.md` or `~/.codex/AGENTS.md`, preserving all unrelated prose. It embeds the complete shared rules plus only the selected host's runtime rules with absolute pack paths. It refuses malformed/duplicate boundaries, symlinked files or parent directories, and hard-linked files; for Nix-managed instructions, update their source instead. It never modifies host settings. Restart/reload the host after setup. Delegates must receive the loaded rules as content or the global file path, since global instructions are not always inherited.
 
-`--host` can be repeated. `--home /temporary/home` safely tests another home; `--pack /absolute/pack` selects a nondefault installation for one host. Defaults are `~/.codex/pstack-local` for Codex and `~/.pi/agent/skills/pstack` for Pi. Claude uses `CLAUDE_PLUGIN_ROOT` when supplied, otherwise this source checkout for manual setup; provide the actual installed skill's pack path for marketplace use. No versioned plugin cache is guessed. Rerun after pack updates or moves; refresh manually copied packs too, so old per-skill host preludes do not survive. The instruction installer does not copy packs or migrate catalog symlinks.
+`--host` can be repeated. `--home /temporary/home` safely tests another home; `--pack /absolute/pack` selects a nondefault installation for one host. The Codex default is `~/.codex/pstack-local`. Claude uses `CLAUDE_PLUGIN_ROOT` when supplied, otherwise this source checkout for manual setup; provide the actual installed skill's pack path for marketplace use. No versioned plugin cache is guessed. Rerun after pack updates or moves; refresh manually copied packs too, so old per-skill host preludes do not survive. The instruction installer does not copy packs or migrate catalog symlinks.
 
 All selected instruction destinations are validated before writes. Each file replacement is atomic, but a multi-host run is not an all-or-nothing transaction across files on an I/O failure; rerunning converges. Do not run concurrent installers or edit the target during installation. Existing global prose still counts toward host context limits (Codex's combined instruction budget is 32KiB).
-
-## Pi install
-
-```bash
-pi install git:github.com/robbplo/skills
-```
-
-For a local checkout, use `pi install /absolute/path/to/skills`, then `python3 scripts/install-instructions.py --host pi --pack /absolute/path/to/skills`. For a Git package, pass its installed pack directory from `pi list` as `--pack`. Reload Pi, then run `/skill:poteto-mode <task>` or `/skill:setup-pstack`. No delegation extension is required; without one, work runs sequentially and independent-review gates remain unmet. See the [Pi adapter](./docs/harness/pi.md).
-
-Do not assume Pi scans `~/.agents/skills`; the installed Pi 1.4.0 loader uses its native skills directory and configured package paths. Use a Pi package installation or a full copied pack under `~/.pi/agent/skills/pstack`. If you explicitly configure a shared pack, point Pi global rules at it with `--host pi --pack /absolute/path/to/shared/pack`.
 
 ## local Codex install
 
@@ -94,13 +83,13 @@ two steps:
 
 new here? the [pstack guide](./docs/guide/README.md) walks you through a first real task, from setup and prompting through verification and overnight runs. stuck, or unsure which skill fits? ask [`/poteto-help`](./skills/poteto-help/SKILL.md).
 
-that's it. the other skills are situational, and the mode skill uses them as needed. Codex and Pi inherit the current session model by default. Other hosts use their adapter's supported choices. Model diversity and parallel workers are used only when available; missing independent review is reported, not simulated. [`/setup-pstack`](./skills/setup-pstack/SKILL.md) configures supported role choices.
+that's it. the other skills are situational, and the mode skill uses them as needed. Codex inherits the current session model by default. Other hosts use their adapter's supported choices. Model diversity and parallel workers are used only when available; missing independent review is reported, not simulated. [`/setup-pstack`](./skills/setup-pstack/SKILL.md) configures supported role choices.
 
 ## usage
 
 use [`/poteto-mode`](./skills/poteto-mode/SKILL.md) at the start of a task. it reads your request, picks from a set of playbooks, and runs the other skills as the steps need them.
 
-Examples below use `/name` as shorthand: type `$name` in Codex, `/skill:name` in Pi, or `/pstack:name` in Claude Code. Any agent can also read the installed `skills/<name>/SKILL.md` directly. Cursor-only UI and automation examples are optional integrations, not installation requirements.
+Examples below use `/name` as shorthand: type `$name` in Codex or `/pstack:name` in Claude Code. Any agent can also read the installed `skills/<name>/SKILL.md` directly. Cursor-only UI and automation examples are optional integrations, not installation requirements.
 
 ### just use [`/poteto-mode`](./skills/poteto-mode/SKILL.md)
 

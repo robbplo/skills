@@ -74,7 +74,7 @@ test("accepts a Codex plan with installed sources and in-session polling", () =>
 });
 
 test("portable hosts accept installed-source plans and reject Cursor commands", () => {
-	for (const host of ["portable", "pi", "claude-code"]) {
+	for (const host of ["portable", "claude-code"]) {
 		runPlan("", 0, codexPlan, ["--host", host]);
 		const plan = codexPlan.replace("### Arm the program", "### Arm the program\n- [ ] Run `/loop 1h`.");
 		expect(runPlan("", 1, plan, ["--host", host]).stderr).toContain(`unsupported in ${host}`);

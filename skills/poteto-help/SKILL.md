@@ -43,7 +43,7 @@ Installing changes nothing until the user invokes a skill. Only `/setup-pstack` 
 
 If cost is the worry, say where the tokens go and how to spend fewer. pstack spends extra tokens on subagents and review panels. Rerun `/setup-pstack` and pick a smaller budget or cheaper models. A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on Auto or a cheaper model. A shorter panel list runs fewer subagents, one for each entry. Save `/poteto-mode` for work that needs rigor.
 
-pstack supports Codex, Pi, and Claude Code through the [host contract](../../docs/harness/README.md). Use the installed [README](../../README.md) for installation. User commands are `$name` in Codex, `/skill:name` in Pi, and `/pstack:name` in Claude Code. Other agents can read each `SKILL.md` directly.
+pstack supports Codex and Claude Code through the [host contract](../../docs/harness/README.md). Use the installed [README](../../README.md) for installation. User commands are `$name` in Codex and `/pstack:name` in Claude Code. Other agents can read each `SKILL.md` directly.
 
 Parallel workers, model selection, and persistent wakes depend on the active host's tools. Without workers, run separable steps sequentially and disclose unmet independent-review gates. Cursor integrations are optional; a missing capability blocks only work that depends on it.
 

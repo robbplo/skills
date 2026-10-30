@@ -27,7 +27,7 @@ const HOST_REQUIREMENTS = new Map([
 		unsupported: [/\/loop\b/, /\bgit\s+show\s+\S+:pstack\//],
 	}],
 ]);
-for (const host of ["portable", "pi", "claude-code"]) {
+for (const host of ["portable", "claude-code"]) {
 	HOST_REQUIREMENTS.set(host, HOST_REQUIREMENTS.get("codex"));
 }
 const HOW_TO_READ_MARKERS = [
@@ -56,7 +56,7 @@ for (let i = 0; i < args.length; i++) {
 	}
 }
 if (invalidArgs || !file || !HOST_REQUIREMENTS.has(host)) {
-	console.error("Usage: node check-plan.mjs [--host cursor|codex|pi|claude-code|portable] <plan.md>");
+	console.error("Usage: node check-plan.mjs [--host cursor|codex|claude-code|portable] <plan.md>");
 	process.exit(2);
 }
 const hostRequirements = HOST_REQUIREMENTS.get(host);

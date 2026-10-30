@@ -78,7 +78,7 @@ class WorktreeAuditTests(unittest.TestCase):
         self.assertFalse(self.rg_log.exists())
 
     def test_portable_hosts_do_not_read_cursor_history(self):
-        for host in ('portable', 'pi', 'claude-code'):
+        for host in ('portable', 'claude-code'):
             with self.subTest(host=host):
                 row = self.row(self.audit('--host', host))
                 self.assertEqual(row['LAST_CHAT'], 'unknown')

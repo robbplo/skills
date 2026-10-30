@@ -20,7 +20,7 @@ class InstallCodexTest(unittest.TestCase):
             (self.source / folder).mkdir(parents=True)
         for script in ('install-codex.py', 'install-instructions.py'):
             shutil.copy2(Path(__file__).with_name(script), self.source / 'scripts' / script)
-        for name in ('README.md', 'codex.md', 'pi.md', 'claude-code.md'):
+        for name in ('README.md', 'codex.md', 'claude-code.md'):
             (self.source / 'docs/harness' / name).write_text('Setup.\n<!-- pstack:runtime -->\nHost instructions.\n')
         (self.source / 'README.md').write_text('Bundled setup help.\n')
         self.write_skill('alpha')

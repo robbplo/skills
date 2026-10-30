@@ -11,8 +11,6 @@ SOURCE = Path(__file__).resolve().parents[1]
 HOSTS = {
     'codex': {'global': '.codex/AGENTS.md', 'pack': '.codex/pstack-local',
               'adapter': 'codex.md', 'project_skills': '.agents/skills/'},
-    'pi': {'global': '.pi/agent/AGENTS.md', 'pack': '.pi/agent/skills/pstack',
-           'adapter': 'pi.md', 'project_skills': '.pi/skills/'},
     'claude-code': {'global': '.claude/CLAUDE.md', 'pack': SOURCE, 'pack_env': 'CLAUDE_PLUGIN_ROOT',
                     'adapter': 'claude-code.md', 'project_skills': '.claude/skills/'},
 }
