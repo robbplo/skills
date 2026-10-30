@@ -5,17 +5,22 @@ description: Configure which models pstack uses per role and at what reasoning b
 
 # Setup pstack
 
-Write `~/.cursor/rules/pstack-models.mdc`, an always-applied rule that sets pstack's model per role.
+Write an always-applied rule that sets pstack's model per role. The file depends on the harness:
+
+- **Cursor**: `~/.cursor/rules/pstack-models.mdc`, with frontmatter.
+- **Claude Code**: `~/.claude/rules/pstack-models.md`, with no frontmatter. Claude Code loads every `.md` in `~/.claude/rules/` into each new session. Read the [Claude Code adapter](../../docs/harness/claude-code.md) and follow its `setup-pstack` section and Models table wherever this skill differs. Never write a `.cursor` path, an `.mdc` file, or Cursor slugs such as `grok-4.7-xhigh-fast` there.
+
+Below, "the rule file" means whichever of these applies.
 
 ## Steps
 
 ### 1. Detect available models
 
-Enumerate the model slugs you can pass to a `Task` subagent in this session. That is the dependable source. If Cursor also exposes a models API or CLI that lists the user's entitled models, prefer it for completeness. If you cannot detect any, ask the user to paste the slugs they have access to. Never write a real slug you have not confirmed is available. The aliases `inherit-parent` and `auto` are always valid even though they are not detected slugs.
+In Cursor, enumerate the model slugs you can pass to a `Task` subagent in this session. That is the dependable source. In Claude Code, the detected models are the `model` values the `Agent` tool schema lists (`opus`, `sonnet`, `haiku`, `fable`), each with an effort from its `effort` values, and a real model is written `<model> <effort>`, such as `opus xhigh`. The effort is the last token, so the budget step works as written. If Cursor also exposes a models API or CLI that lists the user's entitled models, prefer it for completeness. If you cannot detect any, ask the user to paste the slugs they have access to. Never write a real slug you have not confirmed is available. The aliases `inherit-parent` and `auto` are always valid even though they are not detected slugs.
 
 ### 2. Load current state
 
-The default role-to-model mapping is the rule shape shown in step 5 below. If `~/.cursor/rules/pstack-models.mdc` already exists, read it and treat its `# budget` line and its role values as the current choices. Otherwise start from those defaults. A line whose role is not in step 5, such as `how critics`, is from a retired role. Drop it.
+The default role-to-model mapping is the rule shape shown in step 5 below. In Claude Code, map each default slug first: `claude-opus-5-5-xhigh` is `opus xhigh`, and `grok-4.7-xhigh-fast` is `inherit-parent`. If the rule file already exists, read it and treat its `# budget` line and its role values as the current choices. Otherwise start from those defaults. A line whose role is not in step 5, such as `how critics`, is from a retired role. Drop it.
 
 ### 3. Budget, map, and confirm
 
@@ -36,7 +41,7 @@ Every real slug written must be in the detected set. `inherit-parent` and `auto`
 
 ### 5. Write the rule
 
-Write `~/.cursor/rules/pstack-models.mdc` with `alwaysApply: true`, a `# budget` line with the chosen label and its target effort, and one line per role, using the same labels poteto-mode uses. Overwrite the whole file so re-runs stay idempotent. Shape:
+Write the rule file. In Cursor, include the frontmatter below with `alwaysApply: true`; in Claude Code, omit the frontmatter and start at the first comment line. Include a `# budget` line with the chosen label and its target effort, and one line per role, using the same labels poteto-mode uses. Overwrite the whole file so re-runs stay idempotent. Cursor shape:
 
 ```
 ---
@@ -67,7 +72,7 @@ interrogate reviewers: claude-opus-5-5-xhigh, grok-4.7-xhigh-fast
 
 ### 6. Confirm
 
-Tell the user the rule was written and that it applies to new sessions. Re-running this skill updates it.
+Tell the user the rule was written, and where and that it applies to new sessions. Re-running this skill updates it.
 
 ### 7. Offer a verification skill (optional)
 
