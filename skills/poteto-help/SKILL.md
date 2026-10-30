@@ -4,8 +4,6 @@ description: Guides users through pstack setup, /poteto-mode, and picking the sk
 disable-model-invocation: true
 ---
 
-Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below. Installation and command syntax come from the installed README and adapter, not the Cursor examples.
-
 # Poteto help
 
 Answer the user's question about pstack, hand them a prompt they can send, and link the file the answer came from. For a help question, don't start the work. The user asked how, and a pstack run spends real tokens, so let them send the prompt.

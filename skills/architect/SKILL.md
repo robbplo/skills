@@ -4,8 +4,6 @@ description: "Sketch types, signatures, and module structure before code, then s
 disable-model-invocation: true
 ---
 
-Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below.
-
 # Architect
 
 Sketch types, function signatures, class shapes, and module boundaries with `not implemented` bodies and pseudocode. Synthesize across multiple model perspectives, then fill in code against the chosen sketch.

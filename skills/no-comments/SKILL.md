@@ -4,8 +4,6 @@ description: "Spawn Comment Sicko, fix accepted findings, and offer encodings fo
 disable-model-invocation: true
 ---
 
-Before executing, read the [host contract](../../docs/harness/README.md) and active host adapter. They override host-specific examples below.
-
 # No comments
 
 Spawn Comment Sicko. Act on accepted findings.

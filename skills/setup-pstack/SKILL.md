@@ -5,12 +5,10 @@ description: Configure which models pstack uses per role and at what reasoning b
 
 # Setup pstack
 
-Before executing, read the [host contract](../../docs/harness/README.md) and active host adapter. In Codex and Pi, use the adapter's setup procedure instead of the Cursor procedure below.
-
 Write an always-applied rule that sets pstack's model per role. The file depends on the harness:
 
 - **Cursor**: `~/.cursor/rules/pstack-models.mdc`, with frontmatter.
-- **Claude Code**: `~/.claude/rules/pstack-models.md`, with no frontmatter. Claude Code loads every `.md` in `~/.claude/rules/` into each new session. Read the [Claude Code adapter](../../docs/harness/claude-code.md) and follow its `setup-pstack` section and Models table wherever this skill differs. Never write a `.cursor` path, an `.mdc` file, or Cursor slugs such as `grok-4.7-xhigh-fast` there.
+- **Claude Code**: `~/.claude/rules/pstack-models.md`, with no frontmatter. Claude Code loads every `.md` in `~/.claude/rules/` into each new session. Follow the already-loaded global compatibility rules' `setup-pstack` section and Models table wherever this skill differs. Never write a `.cursor` path, an `.mdc` file, or Cursor slugs such as `grok-4.7-xhigh-fast` there.
 
 Below, "the rule file" means whichever of these applies.
 

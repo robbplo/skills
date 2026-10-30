@@ -6,8 +6,6 @@ icon: crown
 color: yellow
 ---
 
-Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples throughout this skill and its playbooks.
-
 # Poteto mode
 
 Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's absolute path in every `poteto-agent` prompt.

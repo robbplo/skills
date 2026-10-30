@@ -9,7 +9,7 @@ the idea underneath is poteto's. if you want to go fast, go deep first. pstack h
 - it installs from my own repo, [robbplo/skills](https://github.com/robbplo/skills), not the upstream marketplace.
 - `deslop` is bundled, so `/deslop` works without another plugin.
 - steps that used to name a specific control skill now say "the control skill for that surface", and use whatever the environment provides.
-- a shared [host contract](./docs/harness/README.md) maps capabilities for Claude Code, Codex, Pi, and other agents. Cursor is optional.
+- shared and host-specific [compatibility rules](./docs/harness/README.md) are installed once in global instructions, not reread by every skill. Cursor is optional.
 
 to pull in upstream changes, compare this tree with the upstream folder and take what i want.
 
@@ -26,15 +26,32 @@ claude code leaves auto-update off for third-party marketplaces. to turn it on, 
 
 claude code prefixes plugin commands and agents, so `/poteto-mode` is `/pstack:poteto-mode`. the [claude code adapter](./docs/harness/claude-code.md) maps every other cursor name. in claude code, `/pstack:setup-pstack` writes your model choices to `~/.claude/rules/pstack-models.md`, and a step that needs a cursor-only feature, such as bugbot or automations, is skipped with a one-line note.
 
+## global instruction setup (required)
+
+Skills and agent briefs assume the full shared and host compatibility rules are already loaded. From this checkout, install only the hosts you use:
+
+```bash
+python3 scripts/install-instructions.py --host pi --pack /absolute/path/to/installed/pstack
+python3 scripts/install-instructions.py --host claude-code --pack /absolute/path/to/installed/pstack
+# Codex setup is included in scripts/install-codex.py, or separately:
+python3 scripts/install-instructions.py --host codex
+```
+
+The command manages a clearly marked section in `~/.pi/agent/AGENTS.md`, `~/.claude/CLAUDE.md`, or `~/.codex/AGENTS.md`, preserving all unrelated prose. It embeds the complete shared rules plus only the selected host's runtime rules with absolute pack paths. It refuses malformed/duplicate boundaries, symlinked files or parent directories, and hard-linked files; for Nix-managed instructions, update their source instead. It never modifies host settings. Restart/reload the host after setup. Delegates must receive the loaded rules as content or the global file path, since global instructions are not always inherited.
+
+`--host` can be repeated. `--home /temporary/home` safely tests another home; `--pack /absolute/pack` selects a nondefault installation for one host. Defaults are `~/.codex/pstack-local` for Codex and `~/.pi/agent/skills/pstack` for Pi. Claude uses `CLAUDE_PLUGIN_ROOT` when supplied, otherwise this source checkout for manual setup; provide the actual installed skill's pack path for marketplace use. No versioned plugin cache is guessed. Rerun after pack updates or moves; refresh manually copied packs too, so old per-skill host preludes do not survive. The instruction installer does not copy packs or migrate catalog symlinks.
+
+All selected instruction destinations are validated before writes. Each file replacement is atomic, but a multi-host run is not an all-or-nothing transaction across files on an I/O failure; rerunning converges. Do not run concurrent installers or edit the target during installation. Existing global prose still counts toward host context limits (Codex's combined instruction budget is 32KiB).
+
 ## Pi install
 
 ```bash
 pi install git:github.com/robbplo/skills
 ```
 
-For a local checkout, use `pi install /absolute/path/to/skills`. Reload Pi, then run `/skill:poteto-mode <task>` or `/skill:setup-pstack`. No delegation extension is required; without one, work runs sequentially and independent-review gates remain unmet. See the [Pi adapter](./docs/harness/pi.md).
+For a local checkout, use `pi install /absolute/path/to/skills`, then `python3 scripts/install-instructions.py --host pi --pack /absolute/path/to/skills`. For a Git package, pass its installed pack directory from `pi list` as `--pack`. Reload Pi, then run `/skill:poteto-mode <task>` or `/skill:setup-pstack`. No delegation extension is required; without one, work runs sequentially and independent-review gates remain unmet. See the [Pi adapter](./docs/harness/pi.md).
 
-Pi also discovers `~/.agents/skills`. If you already use the Codex installation below, use that shared copy instead of installing duplicate skills. Host selection follows the running agent, not the installation directory.
+Do not assume Pi scans `~/.agents/skills`; the installed Pi 1.4.0 loader uses its native skills directory and configured package paths. Use a Pi package installation or a full copied pack under `~/.pi/agent/skills/pstack`. If you explicitly configure a shared pack, point Pi global rules at it with `--host pi --pack /absolute/path/to/shared/pack`.
 
 ## local Codex install
 
@@ -44,14 +61,17 @@ python3 scripts/install-codex.py
 
 Then use `$poteto-mode <task>` or `$poteto-help` in Codex. The installer copies
 an adapted pack to `~/.codex/pstack-local` and links skills into
-`~/.agents/skills`; it does not change Claude or global Codex configuration.
+`~/.agents/skills` and installs a bounded compatibility section in `~/.codex/AGENTS.md`; it does not change Claude or other Codex settings.
 Roles inherit your Codex session model by default. Rerun the installer after
 local edits. See the [Codex adapter](./docs/harness/codex.md) for mappings and
 limitations. No release or marketplace installation is needed.
 
 Reinstalls stage and validate the replacement before changing the working pack.
 They preserve `models.md`, include this README, and prune only obsolete links
-owned by this pack. Handled failures restore the previous installation.
+owned by this pack. Handled publication failures restore the previous pack and links.
+Global instruction validation happens before pack changes. Instruction publication
+is a separate atomic file replacement, not a transaction spanning the pack and
+instructions; rerun after an interruption to reconcile both.
 The directory switch is recoverable, not atomic. Rerun after an interrupted switch.
 Codex plans and cleanup commands use `--host codex` as documented in the adapter.
 Codex polling lasts only while the session remains active.

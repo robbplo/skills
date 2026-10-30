@@ -4,8 +4,6 @@ description: "Spawn N parallel candidates at the same task, pick a base, graft t
 disable-model-invocation: true
 ---
 
-Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below.
-
 # Arena
 
 Open a todolist with one entry per phase (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything.

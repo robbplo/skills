@@ -4,8 +4,6 @@ description: "Keep a reviewable decision trail for long-running or unattended wo
 disable-model-invocation: true
 ---
 
-Before executing, read the [host contract](../../docs/harness/README.md) and active host adapter. They override host-specific examples below.
-
 # Show me your work
 
 Keep one canonical log.

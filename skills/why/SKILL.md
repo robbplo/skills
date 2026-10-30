@@ -4,8 +4,6 @@ description: "Use for 'why does X work this way', 'why we picked Y', design rati
 disable-model-invocation: true
 ---
 
-Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below.
-
 # Why
 
 Investigate the motivation and intent behind code. The companion `how` skill answers what the code does and how it works. `why` answers what forces led to its shape.

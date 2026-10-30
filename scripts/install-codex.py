@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Install an adapted local copy without modifying upstream skills or host config."""
+"""Install the local Codex pack, catalog links, and global pstack instructions."""
 import argparse
 import fcntl
 import json
+import importlib.util
 import os
 from pathlib import Path
 import re
@@ -11,6 +12,9 @@ import tempfile
 
 SOURCE = Path(__file__).resolve().parents[1]
 MARKER = '.pstack-local-install'
+spec = importlib.util.spec_from_file_location('pstack_instructions', Path(__file__).with_name('install-instructions.py'))
+instructions = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(instructions)
 
 
 def skill_frontmatter(path: Path):
@@ -60,17 +64,12 @@ def render_pack(stage: Path, pack: Path):
     if (pack / 'models.md').is_file():
         shutil.copy2(pack / 'models.md', stage / 'models.md')
     (stage / MARKER).write_text(f'Source: {SOURCE}\n')
-    adapter = pack / 'docs/harness/codex.md'
-    prelude = (f'## Host instructions\n\nBefore doing any work, read `{pack / "docs/harness/README.md"}` '
-               'and select the active host adapter. This shared catalog may be loaded by Codex or Pi. '
-               f'Only in Codex, read `{adapter}` and `{pack / "models.md"}` if present. '
-               'Pass the contract and selected adapter paths to every delegate.\n\n')
     for name, (front, body) in parsed.items():
         explicit_only = 'disable-model-invocation: true' in front
         front = '\n'.join(line for line in front.splitlines() if not line.startswith(
             ('user-invocable:', 'icon:', 'color:')))
         dest = stage / 'skills' / name / 'SKILL.md'
-        dest.write_text('---\n' + front + '\n---\n\n' + prelude + body.lstrip())
+        dest.write_text('---\n' + front + '\n---\n\n' + body.lstrip())
         if explicit_only:
             metadata = dest.parent / 'agents' / 'openai.yaml'
             metadata.parent.mkdir(exist_ok=True)
@@ -125,6 +124,7 @@ def install(home: Path):
     pack = home / '.codex' / 'pstack-local'
     catalog = home / '.agents' / 'skills'
     transaction = pack.parent / '.pstack-local-transaction'
+    prepared = instructions.prepare(home, 'codex', pack, SOURCE)
     pack.parent.mkdir(parents=True, exist_ok=True)
     with (pack.parent / '.pstack-local-install.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
@@ -153,6 +153,7 @@ def install(home: Path):
                 link = catalog / name
                 if not os.path.lexists(link):
                     link.symlink_to(pack / 'skills' / name, target_is_directory=True)
+            instructions.publish(prepared, home)
             (transaction / 'committed').touch()
         except BaseException:
             recover(transaction, pack, catalog)
@@ -165,6 +166,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--home', type=Path, default=Path.home(), help='Override home for testing')
     try:
-        install(parser.parse_args().home.expanduser().resolve())
+        install(parser.parse_args().home.expanduser().absolute())
     except (OSError, ValueError) as error:
         parser.exit(1, f'Install failed: {error}\n')

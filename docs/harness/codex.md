@@ -3,7 +3,7 @@
 Run `python3 scripts/install-codex.py` from this checkout. It copies the pack to
 `~/.codex/pstack-local` and links its skills into `~/.agents/skills`. It refuses
 to overwrite unrelated installations. Rerun after editing this checkout.
-No marketplace, release, Claude installation, or global Codex config is changed.
+It also installs the full shared and Codex rules in `~/.codex/AGENTS.md`, preserving unrelated text within clearly bounded pstack-managed sections. No marketplace, release, Claude installation, or other Codex settings are changed. Global instruction setup is required; reload Codex afterward.
 The installer stages and validates the replacement before publication. It keeps
 `models.md`, includes `README.md`, and removes obsolete skill links only when
 they belong to this pack. Handled publication errors restore the previous pack
@@ -12,13 +12,24 @@ Rerun the installer to recover an interrupted switch from its managed backup.
 
 Use `$poteto-mode <task>`, `$poteto-help`, or `$setup-pstack` in Codex. Skills are
 detected automatically; restart Codex if they do not appear. To uninstall, remove
-only the symlinks pointing into `~/.codex/pstack-local/skills`, then that pack.
+only the symlinks pointing into `~/.codex/pstack-local/skills`, then that pack. Remove only the bounded pstack-managed section from `~/.codex/AGENTS.md` if uninstalling its rules too.
 
-## Runtime adapter
+Run regression checks from the checkout before reinstalling:
 
-Read the [host contract](README.md), then this adapter when the active host is Codex. A Pi session discovering this shared installation uses the Pi adapter instead. These mappings supersede
+```bash
+python3 scripts/test_portability.py
+python3 scripts/test_install_codex.py
+python3 skills/poteto-mode/scripts/worktree-audit.test.py
+bun test skills/poteto-mode/scripts/check-plan.test.ts
+```
+
+<!-- pstack:runtime -->
+
+## Codex runtime rules
+
+These mappings supersede
 Cursor-specific instructions in the bundled skills, playbooks, and agent briefs.
-`<pstack>` is the installed directory containing this file's `docs/` ancestor.
+`<pstack>` is the installed pack directory.
 Never invent tool fields or claim an unavailable feature ran.
 
 ### Skills and tools
@@ -69,8 +80,8 @@ that is installed outside that repository. Validate the result with the
 installed checker and the explicit host flag.
 
 ```bash
-node "$HOME/.codex/pstack-local/skills/poteto-mode/scripts/check-plan.mjs" --host codex /absolute/path/to/plan.md
-bash "$HOME/.codex/pstack-local/skills/poteto-mode/scripts/worktree-audit.sh" --host codex -b origin/main /absolute/path/to/repo
+node "<pstack>/skills/poteto-mode/scripts/check-plan.mjs" --host codex /absolute/path/to/plan.md
+bash "<pstack>/skills/poteto-mode/scripts/worktree-audit.sh" --host codex -b origin/main /absolute/path/to/repo
 ```
 
 Use the actual installation path if `--home` changed it. The audit reports
@@ -79,20 +90,12 @@ applies. It does not scan Cursor transcripts or infer that a worktree is idle.
 Check active and pinned chats independently before pruning. An omitted host
 also leaves activity unknown. Only `--host cursor` enables the Cursor scan.
 
-Run these regression checks from the checkout before reinstalling.
-
-```bash
-python3 scripts/test_install_codex.py
-python3 skills/poteto-mode/scripts/worktree-audit.test.py
-bun test skills/poteto-mode/scripts/check-plan.test.ts
-```
-
 ### Delegation
 
 - `poteto-agent` and `comment-sicko` are prompt briefs, NOT registered Codex
   agent types. Use an available agent type (normally `default`) and instruct
-  it to read `<pstack>/agents/<name>.md`, this adapter, and the absolute
-  `<pstack>/skills/poteto-mode/SKILL.md` path before working. Never search Cursor
+  it to read `<pstack>/agents/<name>.md` and the absolute
+  `<pstack>/skills/poteto-mode/SKILL.md` path before working. Pass the applicable loaded rules in its brief. Never search Cursor
   plugin directories. The parent owns the playbook and delegation.
 - `generalPurpose` means an available general agent, normally `default`.
 - `readonly: true` means explicitly instruct the worker not to edit files,

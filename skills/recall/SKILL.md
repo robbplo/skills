@@ -4,8 +4,6 @@ description: "Reconstruct your recent working context from your own chat history
 disable-model-invocation: true
 ---
 
-Before executing, read the [host contract](../../docs/harness/README.md) and the active host adapter. They override host-specific examples below.
-
 # Recall
 
 **Before you start or resume work, you rebuild the user's recent working context and hand back a tight capsule of where things stand now and what to do next.**

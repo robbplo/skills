@@ -18,9 +18,10 @@ class InstallCodexTest(unittest.TestCase):
         self.catalog = self.home / '.agents/skills'
         for folder in ('scripts', 'skills', 'agents', 'docs/harness', 'assets'):
             (self.source / folder).mkdir(parents=True)
-        shutil.copy2(Path(__file__).with_name('install-codex.py'), self.source / 'scripts/install-codex.py')
+        for script in ('install-codex.py', 'install-instructions.py'):
+            shutil.copy2(Path(__file__).with_name(script), self.source / 'scripts' / script)
         for name in ('README.md', 'codex.md', 'pi.md', 'claude-code.md'):
-            (self.source / 'docs/harness' / name).write_text('Host instructions.\n')
+            (self.source / 'docs/harness' / name).write_text('Setup.\n<!-- pstack:runtime -->\nHost instructions.\n')
         (self.source / 'README.md').write_text('Bundled setup help.\n')
         self.write_skill('alpha')
         self.write_skill('obsolete')
@@ -81,13 +82,19 @@ class InstallCodexTest(unittest.TestCase):
                     entries[str(path.relative_to(self.home))] = ('link', os.readlink(path))
                 elif path.is_file():
                     entries[str(path.relative_to(self.home))] = ('file', path.read_bytes())
+        instructions = self.home / '.codex/AGENTS.md'
+        if instructions.exists():
+            entries['.codex/AGENTS.md'] = ('file', instructions.read_bytes())
         return entries
 
     def test_installs_readme_and_final_adapter_paths(self):
         self.assert_installs()
         self.assertEqual((self.pack / 'README.md').read_text(), 'Bundled setup help.\n')
         skill = (self.pack / 'skills/alpha/SKILL.md').read_text()
-        self.assertIn(str(self.pack / 'docs/harness/codex.md'), skill)
+        self.assertNotIn('## Host instructions', skill)
+        instructions = (self.home / '.codex/AGENTS.md').read_text()
+        self.assertIn(str(self.pack), instructions)
+        self.assertIn('Host instructions.', instructions)
         self.assertTrue((self.catalog / 'alpha').samefile(self.pack / 'skills/alpha'))
         self.assertEqual((self.pack / 'skills/alpha/agents/openai.yaml').read_text(), 'policy:\n  allow_implicit_invocation: false\n')
 

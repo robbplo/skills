@@ -4,7 +4,6 @@ description: "Apply to any non-trivial work, not just bulk work: edits, migratio
 disable-model-invocation: true
 ---
 
-Before executing, read the [host contract](../../docs/harness/README.md) and active host adapter. They override host-specific examples below.
 # Build the Lever
 
 When the work isn't trivial, build the tool that does it instead of doing it by hand.

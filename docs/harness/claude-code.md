@@ -1,6 +1,12 @@
 # pstack in Claude Code
 
-Read the [host contract](README.md) first. Some upstream workflow examples retain Cursor names. In Claude Code, read this file once per session, then map each Cursor name in a skill with the tables below. `<pstack>` means the folder that holds `skills/` and `docs/`. If a Cursor field has no row, drop it and say so. Never pass a field or value the tool schema rejects.
+Setup prerequisite: run `python3 scripts/install-instructions.py --host claude-code --pack /absolute/installed/pack` from the checkout to install the full shared and Claude Code rules in `~/.claude/CLAUDE.md`. Use the pack containing the installed `SKILL.md`, or `CLAUDE_PLUGIN_ROOT` when available. Without either override, manual personal setup uses this source checkout, not a guessed versioned plugin cache. Rerun after plugin updates when the installed path changes, then restart Claude Code. No per-skill adapter reads are needed.
+
+<!-- pstack:runtime -->
+
+## Claude Code runtime rules
+
+Some upstream workflow examples retain Cursor names. Map them with the tables below. `<pstack>` means the installed pack folder that holds `skills/` and `docs/`. If a Cursor field has no row, drop it and say so. Never pass a field or value the tool schema rejects.
 
 ## Tools
 
