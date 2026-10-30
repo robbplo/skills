@@ -16,11 +16,12 @@ class InstallCodexTest(unittest.TestCase):
         self.home = self.root / 'home'
         self.pack = self.home / '.codex/pstack-local'
         self.catalog = self.home / '.agents/skills'
-        for folder in ('scripts', 'skills', 'agents', 'docs/harness', 'assets'):
+        for folder in ('scripts', 'skills', 'agents', 'docs/harness', 'assets', 'config'):
             (self.source / folder).mkdir(parents=True)
         shutil.copy2(Path(__file__).with_name('install-codex.py'), self.source / 'scripts/install-codex.py')
         (self.source / 'docs/harness/codex.md').write_text('Codex adapter.\n')
         (self.source / 'README.md').write_text('Bundled setup help.\n')
+        (self.source / 'config/codex-models.md').write_text('how explorer: inherit-parent\n')
         self.write_skill('alpha')
         self.write_skill('obsolete')
 
@@ -121,10 +122,11 @@ class InstallCodexTest(unittest.TestCase):
         self.assertEqual(os.readlink(unrelated), str(self.root / 'other-skill'))
         self.assertTrue((self.catalog / 'alpha').exists())
 
-    def test_reinstall_preserves_models_and_is_idempotent(self):
+    def test_reinstall_restores_tracked_models_and_is_idempotent(self):
         self.assert_installs()
-        (self.pack / 'models.md').write_text('how explorer: inherit-parent\n')
+        self.assertEqual((self.pack / 'models.md').read_text(), 'how explorer: inherit-parent\n')
         before = self.snapshot()
+        (self.pack / 'models.md').write_text('local drift\n')
         self.assert_installs()
         self.assertEqual(self.snapshot(), before)
 

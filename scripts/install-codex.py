@@ -51,13 +51,12 @@ def render_pack(stage: Path, pack: Path):
     if not skills:
         raise ValueError(f'No skills found in {SOURCE}')
     parsed = {skill.parent.name: skill_frontmatter(skill) for skill in skills}
-    for folder in ('skills', 'agents', 'docs', 'assets'):
+    for folder in ('skills', 'agents', 'docs', 'assets', 'config'):
         shutil.copytree(SOURCE / folder, stage / folder)
     shutil.copy2(SOURCE / 'README.md', stage / 'README.md')
     if not (stage / 'docs/harness/codex.md').is_file():
         raise ValueError('Missing Codex adapter')
-    if (pack / 'models.md').is_file():
-        shutil.copy2(pack / 'models.md', stage / 'models.md')
+    shutil.copy2(SOURCE / 'config/codex-models.md', stage / 'models.md')
     (stage / MARKER).write_text(f'Source: {SOURCE}\n')
     adapter = pack / 'docs/harness/codex.md'
     prelude = (f'## Codex host instructions\n\nBefore doing any work, read `{adapter}` '
