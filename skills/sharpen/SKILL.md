@@ -4,6 +4,8 @@ description: "Make a task deeper, not bigger, then rewrite the prompt. Use for /
 disable-model-invocation: true
 ---
 
+In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
+
 I want a deeper version of this task, not a bigger one. Before rewriting it, do four things:
 
 1. Say what a top professional in this field would do here that I'm not asking for.

@@ -1,5 +1,10 @@
 # pstack in Codex (local install)
 
+The source skills use Claude Code by default. The Codex installer adds a Codex
+instruction to every installed skill before its body. Read this file once per
+session, then use its mappings for Cursor and Claude Code instructions in the
+skills. The host's tool schema and permissions take precedence.
+
 Run `python3 scripts/install-codex.py` from this checkout. It copies the pack to
 `~/.codex/pstack-local` and links its skills into `~/.agents/skills`. It refuses
 to overwrite unrelated installations. Rerun after editing this checkout.

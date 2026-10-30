@@ -4,6 +4,8 @@ description: "Apply when facing a novel UI interaction or architectural decision
 disable-model-invocation: true
 ---
 
+In Claude Code, read `../../docs/harness/claude-code.md` once per session before following this skill. Apply its mappings to Cursor tool names, paths, models, and agent fields. The host tool schema and permissions take precedence.
+
 # Exhaust the Design Space
 
 It also applies to product design decisions where user experience depends on feel, not logic.
