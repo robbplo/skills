@@ -9,6 +9,7 @@ color: yellow
 # Poteto mode
 
 Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's absolute path in every `poteto-agent` prompt.
+Before running a bundled playbook in Claude Code, read `../../docs/harness/claude-code.md`. Some playbooks still describe Cursor operations; apply that host adapter before copying instructions or starting dependent work.
 
 ## Non-negotiables
 

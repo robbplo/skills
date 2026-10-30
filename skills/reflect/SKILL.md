@@ -15,10 +15,10 @@ Invoke when the user says "reflect" or "/pstack:reflect". Skip when the conversa
 Before fanning out, find this conversation's transcript under `~/.claude/projects/<slug>/`, where the slug replaces each `/` and `.` in the workspace path with `-`. Read only this workspace's folder.
 
 ```bash
-ls -t ~/.claude/projects/<slug>/*.jsonl 2>/dev/null | head -10
+find ~/.claude/projects/<slug> -maxdepth 1 -name '*.jsonl' -type f
 ```
 
-The newest direct `.jsonl` is the current session. Its `<session>/subagents/` folder holds subagent transcripts. For each candidate, read the first JSONL line. Take the file whose `message.content[0].text` contains the conversation's opening user prompt. If none matches, pass a tight digest of the session instead.
+Use a session ID supplied by the host when available. Otherwise inspect user-message records in the candidate files and match this conversation's opening user prompt and later context. Do not choose by modification time alone, and do not assume the first JSONL record is a user message. If no file matches uniquely, pass a tight digest of this session instead. A matched session's `<session>/subagents/` folder holds its subagent transcripts.
 
 ## 2. Spawn three reviewers in parallel
 

@@ -4,7 +4,7 @@
 # operated in it. Emits a table sorted by size with a suggested bucket. Never
 # deletes anything; deletion stays a human-gated step in the playbook.
 #
-# Usage: worktree-audit.sh [--host codex|cursor] [-b|--base <ref>] [repo-path]
+# Usage: worktree-audit.sh [--host codex|cursor|claude] [-b|--base <ref>] [repo-path]
 #   repo-path defaults to the current repo.
 #   Only --host cursor scans transcripts. Other runs report unknown activity.
 #   -b sets the ref the MERGED column checks against (e.g. origin/integration).
@@ -19,8 +19,8 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 	-b|--base) [ $# -ge 2 ] || { echo "error: $1 needs a ref" >&2; exit 2; }; base="$2"; shift 2 ;;
 	--host)
-		[ $# -ge 2 ] || { echo "error: --host needs codex or cursor" >&2; exit 2; }
-		case "$2" in codex|cursor) host="$2" ;; *) echo "error: invalid host: $2 (expected codex or cursor)" >&2; exit 2 ;; esac
+		[ $# -ge 2 ] || { echo "error: --host needs codex, cursor, or claude" >&2; exit 2; }
+		case "$2" in codex|cursor|claude) host="$2" ;; *) echo "error: invalid host: $2 (expected codex, cursor, or claude)" >&2; exit 2 ;; esac
 		shift 2 ;;
 	-h|--help) sed -n '2,/^set -u/p' "$0" | sed '$d; s/^# \{0,1\}//'; exit 0 ;;
 	-*) echo "error: unknown option: $1" >&2; exit 2 ;;
