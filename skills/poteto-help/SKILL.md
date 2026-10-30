@@ -82,6 +82,7 @@ The default answer is `/poteto-mode`, which runs most of the others when its ste
 | Fix a bug test-first when a cheap local test exists | [`/tdd`](../tdd/SKILL.md) |
 | Apply TypeScript rules to `.ts` or `.tsx` work | [`/typescript-best-practices`](../typescript-best-practices/SKILL.md) |
 | Strip AI slop from the diff before commit | [`/deslop`](../deslop/SKILL.md) |
+| Open a PR, watch its CI, and fix or explain a failure | [`/submit-pr`](../submit-pr/SKILL.md) |
 | Strip comments before review, using a reviewer that didn't write them | [`/no-comments`](../no-comments/SKILL.md) |
 | Clean AI tells out of prose | [`/unslop`](../unslop/SKILL.md) |
 | Write docs, an RFC, a README, a PR description, or a commit message to a standard | [`/technical-writing`](../technical-writing/SKILL.md) |
