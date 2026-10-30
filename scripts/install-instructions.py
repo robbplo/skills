@@ -46,10 +46,10 @@ def render_instructions(home: Path, host: str, pack: Path, source=SOURCE):
                       lambda match: '](' + str(pack / 'docs/harness' / match[1]) + ')', text)
         text = text.replace('$HOME/', str(home) + '/').replace('~/', str(home) + '/')
         parts.append(text.rstrip())
-    header = (f'# pstack compatibility rules ({host})\n\nInstalled pack: `{pack}`. '
-              'These rules are already loaded; do not reread adapters for each skill. '
-              'Pass these rules as content or the absolute global instruction file path, '
-              'plus absolute brief paths, to delegates; do not assume inheritance.\n\n')
+    header = (f'# pstack compatibility rules ({host})\n\nThe installed pack is `{pack}`. '
+              'These rules are already loaded. Do not reread adapters for each skill. '
+              'Give delegates these rules or the absolute path to this global instruction file. '
+              'Include absolute paths to their briefs. Do not assume delegates inherit these rules.\n\n')
     return header + '\n\n'.join(parts)
 
 

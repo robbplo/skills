@@ -121,7 +121,7 @@ class InstructionsTest(unittest.TestCase):
                 self.assertNotIn('$HOME/', first)
                 self.assertNotIn('Setup prerequisite:', first)
                 self.assertNotIn('Read the [host contract]', first)
-                self.assertIn('do not assume inheritance', first)
+                self.assertIn('Do not assume delegates inherit these rules.', first)
                 for other in instructions.HOSTS.keys() - {host}:
                     self.assertNotIn(f'## {HOST_LABELS[other]} runtime rules', first)
                 before = target.stat().st_mtime_ns
@@ -226,18 +226,18 @@ class InstructionsTest(unittest.TestCase):
         plugin = self.home.parent / 'actual-plugin'
         with patch.dict(os.environ, {'CLAUDE_PLUGIN_ROOT': str(plugin)}):
             instructions.install(self.home, ['claude-code'])
-            self.assertIn(f'Installed pack: `{plugin}`', self.target('claude-code').read_text())
+            self.assertIn(f'The installed pack is `{plugin}`.', self.target('claude-code').read_text())
             override = self.home.parent / 'explicit-pack'
             instructions.install(self.home, ['claude-code'], override)
-            self.assertIn(f'Installed pack: `{override}`', self.target('claude-code').read_text())
-            self.assertNotIn(f'Installed pack: `{plugin}`', self.target('claude-code').read_text())
+            self.assertIn(f'The installed pack is `{override}`.', self.target('claude-code').read_text())
+            self.assertNotIn(f'The installed pack is `{plugin}`.', self.target('claude-code').read_text())
 
     def test_cli_host_selection_and_pack_override(self):
         result = subprocess.run([sys.executable, str(ROOT / 'scripts/install-instructions.py'),
                                  '--home', str(self.home), '--host', 'pi', '--pack', str(ROOT)],
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn(f'Installed pack: `{ROOT}`', self.target('pi').read_text())
+        self.assertIn(f'The installed pack is `{ROOT}`.', self.target('pi').read_text())
         self.assertFalse(self.target('codex').exists())
         self.assertFalse(self.target('claude-code').exists())
 
