@@ -73,6 +73,18 @@ test("accepts a Codex plan with installed sources and in-session polling", () =>
 	runPlan("", 0, codexPlan, ["--host", "codex"]);
 });
 
+test("accepts a Claude Code plan with installed sources and in-session polling", () => {
+	runPlan("", 0, codexPlan, ["--host", "claude"]);
+});
+
+test("rejects Cursor-only instructions in Claude Code plans", () => {
+	for (const command of ["/loop 1h", "git show origin/main:pstack/skills/swarm/SKILL.md"]) {
+		const plan = codexPlan.replace("### Arm the program", `### Arm the program\n- [ ] Run \`${command}\`.`);
+		const result = runPlan("", 1, plan, ["--host", "claude"]);
+		expect(result.stderr).toContain("unsupported in Claude Code");
+	}
+});
+
 test("requires each Codex program instruction", () => {
 	for (const marker of ["Read installed playbooks.", "Wake mechanism.", "status message"]) {
 		const result = runPlan("", 1, codexPlan.replace(marker, "Removed instruction."), ["--host", "codex"]);

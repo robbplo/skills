@@ -26,6 +26,10 @@ const HOST_REQUIREMENTS = new Map([
 		markers: ["Read installed playbooks.", "Wake mechanism.", "status message"],
 		unsupported: [/\/loop\b/, /\bgit\s+show\s+\S+:pstack\//],
 	}],
+	["claude", {
+		markers: ["Read installed playbooks.", "Wake mechanism.", "status message"],
+		unsupported: [/\/loop\b/, /\bgit\s+show\s+\S+:pstack\//],
+	}],
 ]);
 const HOW_TO_READ_MARKERS = [
 	"One box is one unit of work",
@@ -53,7 +57,7 @@ for (let i = 0; i < args.length; i++) {
 	}
 }
 if (invalidArgs || !file || !HOST_REQUIREMENTS.has(host)) {
-	console.error("Usage: node check-plan.mjs [--host cursor|codex] <plan.md>");
+	console.error("Usage: node check-plan.mjs [--host cursor|codex|claude] <plan.md>");
 	process.exit(2);
 }
 const hostRequirements = HOST_REQUIREMENTS.get(host);
@@ -143,7 +147,7 @@ else {
 	}
 	for (const pattern of hostRequirements.unsupported) {
 		const match = programText.match(pattern);
-		if (match) fail(program.n, `"${match[0]}" unsupported in Codex`);
+		if (match) fail(program.n, `"${match[0]}" unsupported in ${host === "claude" ? "Claude Code" : "Codex"}`);
 	}
 }
 

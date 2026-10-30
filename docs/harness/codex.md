@@ -1,5 +1,10 @@
 # pstack in Codex (local install)
 
+The source skills use Claude Code by default. The Codex installer adds a Codex
+instruction to every installed skill before its body. Read this file once per
+session, then use its mappings for Cursor and Claude Code instructions in the
+skills. The host's tool schema and permissions take precedence.
+
 Run `python3 scripts/install-codex.py` from this checkout. It copies the pack to
 `~/.codex/pstack-local` and links its skills into `~/.agents/skills`. It refuses
 to overwrite unrelated installations. Rerun after editing this checkout.
@@ -23,14 +28,15 @@ Never invent tool fields or claim an unavailable feature ran.
 
 ### Skills and tools
 
-- `/name` means `$name` for user invocation. To run another skill, read
-  `<pstack>/skills/<name>/SKILL.md` and follow it; no slash-command tool is needed.
+- `/name` and `/pstack:name` mean `$name` for user invocation. Strip the
+  `pstack:` plugin prefix before resolving `<pstack>/skills/<name>/SKILL.md`
+  and following it; no slash-command tool is needed.
 - `Read`, `Grep`, `Glob`, and `Bash` mean the available Codex file/shell tools.
-- `Task` means `spawn_agent` when available. Use only fields accepted by the
+- `Task` and `Agent` mean `spawn_agent` when available. Use only fields accepted by the
   current schema. Track returned IDs with `wait`, `send_input`, and `close_agent`
   as available. Otherwise execute the steps sequentially and disclose that.
 - Todo lists use `update_plan` when available, otherwise a checklist in replies.
-- `AskQuestion` means `request_user_input` only when available in the current
+- `AskQuestion` and `AskUserQuestion` mean `request_user_input` only when available in the current
   mode; otherwise ask in plain text. Do not enter plan mode just to ask.
 - Cursor's built-in `create-skill` means Codex's `skill-creator` if available.
   Other unbundled skills are optional dependencies:
@@ -89,12 +95,15 @@ bun test skills/poteto-mode/scripts/check-plan.test.ts
 
 ### Delegation
 
-- `poteto-agent` and `comment-sicko` are prompt briefs, NOT registered Codex
+- `poteto-agent`, `comment-sicko`, `pstack:poteto-agent`, and
+  `pstack:comment-sicko` are prompt briefs, NOT registered Codex
   agent types. Use an available agent type (normally `default`) and instruct
-  it to read `<pstack>/agents/<name>.md`, this adapter, and the absolute
+  it to read `<pstack>/agents/<name>.md` after stripping `pstack:`, this adapter, and the absolute
   `<pstack>/skills/poteto-mode/SKILL.md` path before working. Never search Cursor
   plugin directories. The parent owns the playbook and delegation.
-- `generalPurpose` means an available general agent, normally `default`.
+- `generalPurpose`, `general-purpose`, and `Explore` mean an available general
+  agent, normally `default`. `Explore` is read-only intent: instruct the worker
+  not to edit files, then inspect the diff and status afterward.
 - `readonly: true` means explicitly instruct the worker not to edit files,
   and inspect the diff/status afterward. This is not a sandbox guarantee.
 - Drop `run_in_background`; use Codex's actual agent lifecycle. For `resume`,
