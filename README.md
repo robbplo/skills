@@ -36,7 +36,7 @@ Then use `$poteto-mode <task>` or `$poteto-help` in Codex. The installer copies
 an adapted pack to `~/.codex/pstack-local` and links skills into
 `~/.agents/skills`; it does not change Claude or global Codex configuration.
 Role models come from `config/codex-models.md`. Rerun the installer after
-local edits. See the [Codex adapter](./docs/harness/codex.md) for mappings and
+local edits; it overwrites `models.md` from `config/codex-models.md`, so edit that file instead. See the [Codex adapter](./docs/harness/codex.md) for mappings and
 limitations. No release or marketplace installation is needed.
 
 Reinstalls stage and validate the replacement before changing the working pack.
@@ -56,13 +56,11 @@ bun test skills/poteto-mode/scripts/check-plan.test.ts
 
 ## get started
 
-one step:
-
-1. use [`/poteto-mode`](./skills/poteto-mode/SKILL.md) whenever you're doing anything that requires rigor.
+use [`/poteto-mode`](./skills/poteto-mode/SKILL.md) whenever you're doing anything that requires rigor.
 
 new here? the [pstack guide](./docs/guide/README.md) walks you through a first real task, from setup and prompting through verification and overnight runs. stuck, or unsure which skill fits? ask [`/poteto-help`](./skills/poteto-help/SKILL.md).
 
-that's it. the other skills are situational, and the mode skill uses them for you as needed. the mode splits work by model strength. the per-role models live in [`config/claude-models.md`](./config/claude-models.md) for claude code and [`config/codex-models.md`](./config/codex-models.md) for codex. both are checked in, so cloud agents get them too.
+that's it. the other skills are situational, and the mode skill uses them for you as needed. the mode splits work by model strength. the per-role models live in [`config/claude-models.md`](./config/claude-models.md) for claude code and [`config/codex-models.md`](./config/codex-models.md) for codex. both are checked in, so cloud agents get them too. to customize them, fork the repo.
 
 ## usage
 
@@ -294,7 +292,7 @@ cursor already has a great plan mode which works great with pstack. but personal
 
 type [`/automate-me`](./skills/automate-me/SKILL.md). it mines your recent transcripts, drafts a `<your-name>-mode` skill from how you've actually worked, and routes through pstack underneath. you keep pstack as the base and end up with your own routing skill alongside `poteto-mode`.
 
-models are configurable too. edit the role lines in [`config/claude-models.md`](./config/claude-models.md) or [`config/codex-models.md`](./config/codex-models.md) and commit them. every skill reads them and falls back to sensible defaults when a line is absent, so you override only what you want.
+models are configurable too. fork the repo, edit the role lines in [`config/claude-models.md`](./config/claude-models.md) or [`config/codex-models.md`](./config/codex-models.md), and install your fork. every skill reads them and falls back to sensible defaults when a line is absent, so you override only what you want.
 
 ## automations
 

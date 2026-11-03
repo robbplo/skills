@@ -24,19 +24,18 @@ Infer the need from the message and the conversation. A named situation, such as
 
 Check the state that changes the answer, and mention it only when it does:
 
-- A role with no line in `<pstack>/config/claude-models.md` uses its default model.
 - No `verify-*` skill or other app harness in the project means agents have no scripted way to drive the app. Mention `/pstack:create-verification-skill` when the question is about proving a change works.
 - No formal verification skill in the project means no property is checked past what tests reach. Mention `/pstack:create-formal-verification-skill` when the question is about a race, an invariant, or another case tests rarely hit. When one exists and the code it covers changed after the commit it records as last in sync, mention `/pstack:maintain-formal-verification-skill` if the question touches that code.
 
 ## Get set up
 
 1. Install with `/plugin marketplace add robbplo/skills`, then `/plugin install pstack@robbplo-skills`.
-2. Optionally edit `<pstack>/config/claude-models.md` to pick a model for each role. It applies to new chats. If the project has no verification skill, offer `/pstack:create-verification-skill` once.
+2. If the project has no verification skill, offer `/pstack:create-verification-skill` once.
 3. Start a real task with `/pstack:poteto-mode`, a goal, and a check that can pass or fail.
 
 Installing changes nothing until the user invokes a skill. The [README](../../README.md) and [guide page 1](../../docs/guide/01-setup.md) have the details. Offer to word their first prompt with them, per [`references/prompting.md`](references/prompting.md).
 
-If cost is the worry, say where the tokens go and how to spend fewer. pstack spends extra tokens on subagents and review panels. Pick cheaper models in `<pstack>/config/claude-models.md`. A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on Auto or a cheaper model. A shorter panel list runs fewer subagents, one for each entry. Save `/pstack:poteto-mode` for work that needs rigor.
+If cost is the worry, say where the tokens go and how to spend fewer. pstack spends extra tokens on subagents and review panels. Pick cheaper models in a fork's [`config/claude-models.md`](../../config/claude-models.md). A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on Auto or a cheaper model. A shorter panel list runs fewer subagents, one for each entry. Save `/pstack:poteto-mode` for work that needs rigor.
 
 In Claude Code, pstack commands take the `pstack:` prefix. Cursor-only steps are skipped with a one-line reason.
 
@@ -83,7 +82,7 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 | Vet a performance number before reporting or acting on it | [`/pstack:benchmark-checklist`](../benchmark-checklist/SKILL.md) |
 | Run a large or cross-cutting change, or one to review after stepping away | [`/pstack:figure-it-out`](../figure-it-out/SKILL.md) |
 | Keep a decision log during a run, and review it afterward | [`/pstack:show-me-your-work`](../show-me-your-work/SKILL.md) |
-| Pick a model for each role | Edit `<pstack>/config/claude-models.md` |
+| Pick a model for each role | Fork the repo and edit [`config/claude-models.md`](../../config/claude-models.md) |
 | Turn their own working habits into a personal mode skill | [`/pstack:automate-me`](../automate-me/SKILL.md) |
 | Turn what a finished task taught into skill edits | [`/pstack:reflect`](../reflect/SKILL.md) |
 | Stop agents from repeating the same mistakes in this repo | [`/pstack:correct`](../correct/SKILL.md) |

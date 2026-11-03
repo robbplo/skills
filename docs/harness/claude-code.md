@@ -34,7 +34,7 @@ pstack skills use Claude Code names by default, but some bundled playbooks and r
 | `claude-<family>-<version>-<effort>[-fast]`, such as `claude-opus-5-5-xhigh` | `model: "opus"` and `effort: "xhigh"`. `model` takes only `opus`, `sonnet`, `haiku`, `fable`. Drop `-fast`. |
 | A `grok-*`, `gpt-*`, or other non-Claude slug | Omit `model` so the agent runs on the session model, and say so. |
 | `auto` or `inherit-parent` | Omit `model`. |
-| The `pstack-models.mdc` rule, `~/.cursor/rules/pstack-models.mdc` | `<pstack>/config/claude-models.md`. Read it when a skill names a role line. If the file or the role's line is missing, use the skill's default slug. |
+| The `pstack-models.mdc` rule, `~/.cursor/rules/pstack-models.mdc` | `config/claude-models.md`. Skills read it by relative path when they name a role line. If the file or the role's line is missing, use the skill's default slug. |
 | A role value `<model> <effort>`, such as `opus high` | `model: "opus"` and `effort: "high"`. |
 
 ## Paths

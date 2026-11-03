@@ -1,7 +1,5 @@
 # pstack per-role model configuration
 
-# budget: medium (high)
-
 This file overrides pstack's bundled role defaults in Codex. Load it at the start
 of each pstack invocation, as required by the Codex host adapter at
 `<pstack>/docs/harness/codex.md`.
@@ -11,7 +9,7 @@ of each pstack invocation, as required by the Codex host adapter at
 - Set `reasoning_effort: "high"` for every configured role and every panel entry.
   Pass the model ID and reasoning effort as separate supported tool fields;
   do not append an effort suffix to a model ID.
-- For this session's `spawn_agent` API, explicit model or effort overrides require
+- For the `spawn_agent` API, explicit model or effort overrides require
   `fork_turns: "none"`. Provide a self-contained task brief, relevant context and
   file paths, and the absolute Codex adapter path to each delegate. On other
   hosts, use only the actual delegation API's supported fields.
@@ -51,6 +49,4 @@ interrogate reviewers: gpt-6.1-sol, gpt-6.1-terra
   architecture panels.
 - Luna handles focused factual reconnaissance for the how explorer. Assign
   open-ended investigation or difficult code reasoning to Sol.
-- Per the user's model preference, former Astra roles use Sol. Where Sol was
-  already present in a panel or pool, Terra replaces Astra. The cross-judge
-  pool lists each available model once.
+- The cross-judge pool lists each available model once.

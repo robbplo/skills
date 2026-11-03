@@ -16,7 +16,7 @@ In Claude Code, run `/plugin marketplace add robbplo/skills`, then `/plugin inst
 
 ## Pick your models
 
-Edit [`config/claude-models.md`](../../config/claude-models.md) (Claude Code) or [`config/codex-models.md`](../../config/codex-models.md) (Codex) and commit it. The files are plain Markdown with one line per role (code delegates, judgment, the review panels). Because they live in the repo, cloud agents get them too.
+Cursor reads the Claude file. The model choices live in [`config/claude-models.md`](../../config/claude-models.md) (Claude Code) and [`config/codex-models.md`](../../config/codex-models.md) (Codex). To change them, fork the repo, edit the file, and install your fork. Edits inside an installed plugin copy are lost on update. The files are plain Markdown with one line per role (code delegates, judgment, the review panels).
 
 You only override what you care about. A role with no line keeps the skill's default. To restore a default, delete that role's line.
 

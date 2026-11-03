@@ -11,6 +11,8 @@ import tempfile
 
 SOURCE = Path(__file__).resolve().parents[1]
 MARKER = '.pstack-local-install'
+CLAUDE_MODELS = '../../config/claude-models.md'
+CODEX_MODELS = '../../models.md'
 
 
 def skill_frontmatter(path: Path):
@@ -51,23 +53,27 @@ def render_pack(stage: Path, pack: Path):
     if not skills:
         raise ValueError(f'No skills found in {SOURCE}')
     parsed = {skill.parent.name: skill_frontmatter(skill) for skill in skills}
-    for folder in ('skills', 'agents', 'docs', 'assets', 'config'):
+    for folder in ('skills', 'agents', 'docs', 'assets'):
         shutil.copytree(SOURCE / folder, stage / folder)
     shutil.copy2(SOURCE / 'README.md', stage / 'README.md')
     if not (stage / 'docs/harness/codex.md').is_file():
         raise ValueError('Missing Codex adapter')
-    shutil.copy2(SOURCE / 'config/codex-models.md', stage / 'models.md')
+    models = SOURCE / 'config/codex-models.md'
+    if not models.is_file():
+        raise ValueError('Missing Codex model config')
+    shutil.copy2(models, stage / 'models.md')
     (stage / MARKER).write_text(f'Source: {SOURCE}\n')
     adapter = pack / 'docs/harness/codex.md'
     prelude = (f'## Codex host instructions\n\nBefore doing any work, read `{adapter}` '
                'and apply its host mappings instead of Cursor/Claude-specific instructions below. '
-               f'Read `{pack / "models.md"}` if it exists. '
+               f'Read `{pack / "models.md"}`. '
                'Pass this adapter path to every delegate.\n\n')
     for name, (front, body) in parsed.items():
         explicit_only = 'disable-model-invocation: true' in front
         front = '\n'.join(line for line in front.splitlines() if not line.startswith(
             ('disable-model-invocation:', 'user-invocable:', 'icon:', 'color:')))
         dest = stage / 'skills' / name / 'SKILL.md'
+        body = body.replace(CLAUDE_MODELS, CODEX_MODELS)
         dest.write_text('---\n' + front + '\n---\n\n' + prelude + body.lstrip())
         if explicit_only:
             metadata = dest.parent / 'agents' / 'openai.yaml'

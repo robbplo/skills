@@ -24,7 +24,7 @@ Use a session ID supplied by the host when available. Otherwise inspect user-mes
 
 One message, three `Agent` calls with `subagent_type: "general-purpose"`. Reviewers need MCP access to look up the tickets, chat threads, and observability traces the transcript references, and readonly strips MCPs.
 
-Each reviewer and the synthesizer name a role line in the `<pstack>/config/claude-models.md` rule and a default. Set `model` and `effort` from that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
+Each reviewer and the synthesizer name a role line in the `../../config/claude-models.md` file and a default. Set `model` and `effort` from that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
 | Lens | Role line | Default `model` | Prompt template |
 |---|---|---|---|

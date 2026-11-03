@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Investigate the motivation and intent behind code. The companion `how` skill answers what the code does and how it works. `why` answers what forces led to its shape.
 
-Each spawn below names a role line in the `<pstack>/config/claude-models.md` rule and a default. Set `model` and `effort` from that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
+Each spawn below names a role line in the `../../config/claude-models.md` file and a default. Set `model` and `effort` from that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
 Every spawn uses `subagent_type: "general-purpose"` to retain MCP access. Do not use `Explore`; the investigators and synthesizer need MCP access to check sources. Investigators still shouldn't write anything.
 
