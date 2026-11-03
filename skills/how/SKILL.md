@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Explore the codebase to answer "how does X work?" questions. Produce architectural explanations at the level of a senior engineer onboarding onto a subsystem, enough to build a working mental model, not so much that it reads like annotated source code.
 
-Every spawn is an `Agent` subagent with `subagent_type: "Explore"`. Tell it not to edit files and check `git status` afterward. Explorers use the `how explorer` line in the `~/.claude/rules/pstack-models.md` rule (default `inherit-parent`), and every explainer uses the `how explainer` line (default `opus xhigh`). Set `model` and `effort` from that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
+Every spawn is an `Agent` subagent with `subagent_type: "Explore"`. Tell it not to edit files and check `git status` afterward. Explorers use the `how explorer` line in the `../../config/claude-models.md` file (default `inherit-parent`), and every explainer uses the `how explainer` line (default `opus xhigh`). Set `model` and `effort` from that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
 ## 1. Assess complexity
 

@@ -9,13 +9,13 @@ Run `python3 scripts/install-codex.py` from this checkout. It copies the pack to
 `~/.codex/pstack-local` and links its skills into `~/.agents/skills`. It refuses
 to overwrite unrelated installations. Rerun after editing this checkout.
 No marketplace, release, Claude installation, or global Codex config is changed.
-The installer stages and validates the replacement before publication. It keeps
-`models.md`, includes `README.md`, and removes obsolete skill links only when
-they belong to this pack. Handled publication errors restore the previous pack
+The installer stages and validates the replacement before publication. It installs
+`config/codex-models.md` as `models.md` (replacing any local edits to it), includes `README.md`, and
+removes obsolete skill links only when they belong to this pack. Handled publication errors restore the previous pack
 and links. The directory switch has a brief rename gap and is not atomic.
 Rerun the installer to recover an interrupted switch from its managed backup.
 
-Use `$poteto-mode <task>`, `$poteto-help`, or `$setup-pstack` in Codex. Skills are
+Use `$poteto-mode <task>` or `$poteto-help` in Codex. Skills are
 detected automatically; restart Codex if they do not appear. To uninstall, remove
 only the symlinks pointing into `~/.codex/pstack-local/skills`, then that pack.
 
@@ -116,30 +116,18 @@ bun test skills/poteto-mode/scripts/check-plan.test.ts
 
 ### Models and setup
 
-By default all roles inherit the current Codex session's model and reasoning
-settings. Claude/Grok slugs are not Codex model IDs. Do not translate them by
+Claude/Grok slugs are not Codex model IDs. Do not translate them by
 inventing names or silently assert a multi-model comparison happened. Panels
 can use independent same-model workers; disclose the loss of model diversity.
 
-Read `<pstack>/models.md` if present at the start of each pstack invocation.
-This replaces all references to `pstack-models.mdc` and Claude model rules; it
-is explicitly loaded, not an automatically applied Codex rule.
+Read `<pstack>/models.md` at the start of each pstack invocation. The installer
+rewrites every reference to `config/claude-models.md` or `pstack-models.mdc` in
+skill bodies to point at it; it is explicitly loaded, not an automatically
+applied Codex rule.
 
-For `$setup-pstack`, override the upstream setup steps as follows:
-1. Inspect the actual delegation tool schema. Offer only model/effort overrides
-   that it supports and whose availability has been verified. If none exist,
-   explain that roles inherit the session settings; change those through Codex's
-   model controls, not by editing global configuration automatically.
-2. Read existing `<pstack>/models.md`. Default scalar roles to `inherit-parent`
-   and panel roles to `inherit-parent, inherit-parent` (two independent workers).
-3. Confirm desired role choices and panel sizes. A reasoning budget is only
-   configurable here if the actual delegation API supports it.
-4. Write `<pstack>/models.md` as plain Markdown, with the role labels from the
-   upstream setup skill, no Cursor frontmatter. Preserve it on reinstall.
-5. Confirm and offer the upstream optional verification-skill steps.
-
-Missing role lines also inherit the session model. Never attempt unsupported
-per-agent model/effort fields, and never spawn nested CLI sessions to bypass this.
+Roles with no line in `models.md` inherit the session's model and reasoning
+settings. Pass only the model and effort fields the delegation tool supports,
+and never spawn nested CLI sessions to bypass this.
 
 ### Paths, unavailable features, and safety
 

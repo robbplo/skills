@@ -16,11 +16,12 @@ class InstallCodexTest(unittest.TestCase):
         self.home = self.root / 'home'
         self.pack = self.home / '.codex/pstack-local'
         self.catalog = self.home / '.agents/skills'
-        for folder in ('scripts', 'skills', 'agents', 'docs/harness', 'assets'):
+        for folder in ('scripts', 'skills', 'agents', 'docs/harness', 'assets', 'config'):
             (self.source / folder).mkdir(parents=True)
         shutil.copy2(Path(__file__).with_name('install-codex.py'), self.source / 'scripts/install-codex.py')
         (self.source / 'docs/harness/codex.md').write_text('Codex adapter.\n')
         (self.source / 'README.md').write_text('Bundled setup help.\n')
+        (self.source / 'config/codex-models.md').write_text('how explorer: inherit-parent\n')
         self.write_skill('alpha')
         self.write_skill('obsolete')
 
@@ -121,10 +122,22 @@ class InstallCodexTest(unittest.TestCase):
         self.assertEqual(os.readlink(unrelated), str(self.root / 'other-skill'))
         self.assertTrue((self.catalog / 'alpha').exists())
 
-    def test_reinstall_preserves_models_and_is_idempotent(self):
+    def test_model_config_path_points_at_codex_models(self):
+        self.write_skill('alpha', '---\nname: alpha\ndescription: "Use alpha."\n---\n\nRead `../../config/claude-models.md`.\n')
         self.assert_installs()
-        (self.pack / 'models.md').write_text('how explorer: inherit-parent\n')
+        self.assertIn('`../../models.md`', (self.pack / 'skills/alpha/SKILL.md').read_text())
+        self.assertFalse((self.pack / 'config').exists())
+
+    def test_missing_model_config_fails_without_installing(self):
+        (self.source / 'config/codex-models.md').unlink()
+        self.assertNotEqual(self.run_install().returncode, 0)
+        self.assertFalse(self.pack.exists())
+
+    def test_reinstall_restores_tracked_models_and_is_idempotent(self):
+        self.assert_installs()
+        self.assertEqual((self.pack / 'models.md').read_text(), 'how explorer: inherit-parent\n')
         before = self.snapshot()
+        (self.pack / 'models.md').write_text('local drift\n')
         self.assert_installs()
         self.assertEqual(self.snapshot(), before)
 
