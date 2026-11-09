@@ -7,6 +7,7 @@ perf-issue: sonnet
 hillclimb: sonnet
 judgment and prose: opus
 hardest tasks: opus
+mechanical and clerical: sonnet
 how explorer: sonnet
 how explainer: opus
 why investigators: sonnet
