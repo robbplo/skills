@@ -31,6 +31,8 @@ Launch all reviewers in a single message with the Agent tool, one per entry on t
 | Reviewer A | `opus xhigh` |
 | Reviewer B | `inherit-parent` |
 
+Run every reviewer in the foreground, so the review blocks until all verdicts are in. Pass `run_in_background: false` when the Agent tool schema offers that field. When it does not, the host decides, so wait for every reviewer's result before Step 4 and do not end the turn early.
+
 Each reviewer gets `subagent_type: "Explore"`, and `model` and `effort` set from its configured entry, or its table default when there is no configured line. Omit `model` for an `auto` or `inherit-parent` entry, so that reviewer runs on the parent model. Tell each reviewer not to edit files and check `git status` afterward.
 
 If the Agent tool rejects a configured model or effort, use that reviewer's table default and say so. Never treat an alias as a rejected model.
