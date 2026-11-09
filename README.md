@@ -158,6 +158,8 @@ to keep [`/poteto-mode`](./skills/poteto-mode/SKILL.md) on across turns, pick it
 | [`/arena`](./skills/arena/SKILL.md) | you want N parallel attempts at the same thing, then to grab the best parts of each. |
 | [`/swarm`](./skills/swarm/SKILL.md) | you want N parallel workers across different slices or races, then one aggregated report. |
 | [`/interrogate`](./skills/interrogate/SKILL.md) | you have a diff and want different models to try to break it, including a strict code-quality lens. |
+| [`/ship-pr`](./skills/ship-pr/SKILL.md) | a branch is code-complete and you want it landed: merge the base in, review and fix, verify, push, watch ci, merge on your word, then post open questions and deploy steps. runs only when you type `/ship-pr`. |
+| [`/robbin-mode`](./skills/robbin-mode/SKILL.md) | robbin's style layered on poteto-mode: terse replies with durations, out-of-scope work queued as tasks, merge over rebase, done means verified. runs only when you type `/robbin-mode`. |
 | [`/automate-me`](./skills/automate-me/SKILL.md) | you want your own `-mode` skill, drafted from how you've actually worked. |
 | [`/make-bot-ui`](./skills/make-bot-ui/SKILL.md) | you want a page or dashboard whose buttons wake a Grok Bot over a webhook, including the sender-key handoff and Tailscale. |
 | [`/reflect`](./skills/reflect/SKILL.md) | a long task landed and you want the recipe captured as a skill edit. |
