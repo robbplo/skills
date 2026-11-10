@@ -32,7 +32,7 @@ When the project names none of these, skip the parts of the steps that need them
 1. Run `/pstack:deslop` on the diff.
 2. Run `/pstack:interrogate` on the diff against the docs or specs it implements.
 3. Sort the findings into **act on** (wrong, or breaks a rule) and **consider** (judgment calls). Hand the act-on items and the cheap considers to one `pstack:poteto-agent` subagent to fix.
-4. Ask the user about the remaining considers, at most four per round. Don't ask about anything a test or a run can settle.
+4. Ask the user about the remaining considers with `AskUserQuestion`, at most four per round. Don't ask about anything a test or a run can settle.
 
 Skip this step when the diff is docs-only or under about 30 changed lines.
 
