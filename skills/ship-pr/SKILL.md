@@ -29,12 +29,13 @@ When the project names none of these, skip the parts of the steps that need them
 
 ## 2. Review
 
-1. Run `/pstack:deslop` on the diff.
-2. Run `/pstack:interrogate` on the diff against the docs or specs it implements.
-3. Sort the findings into **act on** (wrong, or breaks a rule) and **consider** (judgment calls). Hand the act-on items and the cheap considers to one `pstack:poteto-agent` subagent to fix.
-4. Ask the user about the remaining considers with `AskUserQuestion`, at most four per round. Don't ask about anything a test or a run can settle.
+1. Run `/pstack:deslop` on the code in the diff. Skip it when the diff has no code.
+2. Run `/pstack:unslop` on the prose in the diff: docs, READMEs, skill text, the PR body and commit messages. Skip it when the diff has no prose.
+3. Run `/pstack:interrogate` on the diff against the docs or specs it implements. Docs changes get this too. Interrogate them for wrong claims, contradictions with the code or other docs, and missing decisions.
+4. Sort the findings into **act on** (wrong, or breaks a rule) and **consider** (judgment calls). Hand the act-on items and the cheap considers to one `pstack:poteto-agent` subagent to fix.
+5. Ask the user about the remaining considers with `AskUserQuestion`, at most four per round. Don't ask about anything a test or a run can settle.
 
-Skip this step when the diff is docs-only or under about 30 changed lines.
+Skip this step only when the diff is code-only and under about 30 changed lines. A docs change always gets steps 2 and 3, however small.
 
 ## 3. Docs follow the decisions
 
