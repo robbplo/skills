@@ -73,3 +73,7 @@ You are the lead reviewer, a pragmatic senior engineer, not a neutral aggregator
 
 ### Agreement Map
 [Where models agreed and diverged, and what that pattern tells us.]
+
+## Step 6, Post to the PR
+
+After sharing the report in chat, check whether the current branch has an open PR (`gh pr view --json number,url`). If one exists, post the report to it as a comment, verbatim: the exact Markdown shared in chat, with no edits, trimming, or added preamble. Write it to a temp file and use `gh pr comment <number> --body-file <file>` so formatting survives. If there is no PR or `gh` is unavailable, skip this step and say so in one line. Never post anywhere else, and never post partial or draft output.
