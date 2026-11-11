@@ -61,7 +61,7 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 | Understand a change or subsystem, explained plainly | [`/pstack:teach`](../teach/SKILL.md) |
 | Catch up on their own recent work on a topic | [`/pstack:recall`](../recall/SKILL.md) |
 | Catch up on what changed in this chat since their last message, in plain words and small visuals, with every item waiting on them listed and decidable from the reply alone | [`/pstack:ketchup`](../ketchup/SKILL.md) |
-| Catch up like `/pstack:ketchup`, in a short silent video of slides, with the waiting calls as text under it | [`/pstack:ketchup-video`](../ketchup-video/SKILL.md) |
+| Catch up like `/pstack:ketchup`, in a short subtitled video of slides, with the waiting calls as text under it | [`/pstack:ketchup-video`](../ketchup-video/SKILL.md) |
 | Know what a small diff could break outside itself | [`/pstack:blast-radius`](../blast-radius/SKILL.md) |
 | Settle types and module shape before code that crosses a function boundary | [`/pstack:architect`](../architect/SKILL.md) |
 | Get several attempts at one brief, merged into the best one | [`/pstack:arena`](../arena/SKILL.md) |
@@ -113,7 +113,7 @@ Playbooks are step lists inside `/pstack:poteto-mode`, not skills, so they have 
 - "land the stack" runs Shipping.
 - "take over this branch" runs Session pickup.
 - "pause safely" runs Pause safely.
-- "full autopilot on this queue" runs Autopilot-full. "stack them, don't ship" runs Autopilot-stack.
+- "full autopilot on this queue" runs Autopilot-full. "autopilot, don't merge" runs Autopilot-stack.
 - "run the eval playbook" runs Eval.
 
 Use `/pstack:poteto-mode` for a pstack playbook. The Playbooks section of [`poteto-mode`](../poteto-mode/SKILL.md) lists every playbook and when it applies. [Guide page 6](../../docs/guide/06-verify-and-ship.md) covers opening, babysitting, and landing a PR.
