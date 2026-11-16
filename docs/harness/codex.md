@@ -15,7 +15,7 @@ removes obsolete skill links only when they belong to this pack. Handled publica
 and links. The directory switch has a brief rename gap and is not atomic.
 Rerun the installer to recover an interrupted switch from its managed backup.
 
-Use `$poteto-mode <task>` or `$poteto-help` in Codex. Skills are
+Use `$poteto-mode <task>` or `$poteto-mode-help` in Codex. Skills are
 detected automatically; restart Codex if they do not appear. To uninstall, remove
 only the symlinks pointing into `~/.codex/pstack-local/skills`, then that pack.
 

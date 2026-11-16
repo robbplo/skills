@@ -32,7 +32,7 @@ claude code prefixes plugin commands and agents, so `/poteto-mode` is `/pstack:p
 python3 scripts/install-codex.py
 ```
 
-Then use `$poteto-mode <task>` or `$poteto-help` in Codex. The installer copies
+Then use `$poteto-mode <task>` or `$poteto-mode-help` in Codex. The installer copies
 an adapted pack to `~/.codex/pstack-local` and links skills into
 `~/.agents/skills`; it does not change Claude or global Codex configuration.
 Role models come from `config/codex-models.md`. Rerun the installer after
@@ -58,7 +58,7 @@ bun test skills/poteto-mode/scripts/check-plan.test.ts
 
 use [`/poteto-mode`](./skills/poteto-mode/SKILL.md) whenever you're doing anything that requires rigor.
 
-new here? the [pstack guide](./docs/guide/README.md) walks you through a first real task, from setup and prompting through verification and overnight runs. stuck, or unsure which skill fits? ask [`/poteto-help`](./skills/poteto-help/SKILL.md).
+new here? the [pstack guide](./docs/guide/README.md) walks you through a first real task, from setup and prompting through verification and overnight runs. stuck, or unsure which skill fits? ask [`/poteto-mode-help`](./skills/poteto-mode-help/SKILL.md).
 
 that's it. the other skills are situational, and the mode skill uses them for you as needed. the mode splits work by model strength. the per-role models live in [`config/claude-models.md`](./config/claude-models.md) for claude code and [`config/codex-models.md`](./config/codex-models.md) for codex. both are checked in, so cloud agents get them too. to customize them, fork the repo.
 
@@ -145,7 +145,7 @@ to keep [`/poteto-mode`](./skills/poteto-mode/SKILL.md) on across turns, pick it
 | skill | use it when |
 |---|---|
 | [`/poteto-mode`](./skills/poteto-mode/SKILL.md) | default entry point for any non-trivial task. |
-| [`/poteto-help`](./skills/poteto-help/SKILL.md) | you're new to pstack, or unsure which skill, playbook, or principle fits. finds out what you're trying to do, answers that part, and hands you a prompt to type. runs only when you type `/poteto-help`. |
+| [`/poteto-mode-help`](./skills/poteto-mode-help/SKILL.md) | you're new to pstack, or unsure which skill, playbook, or principle fits. finds out what you're trying to do, answers that part, and hands you a prompt to type. runs only when you type `/poteto-mode-help`. |
 | [`/in-your-own-words`](./skills/in-your-own-words/SKILL.md) | you want the agent to play back your goal and the problem before it starts. runs only when you type `/in-your-own-words`. |
 | [`/sharpen`](./skills/sharpen/SKILL.md) | you want a prompt made deeper, not bigger, before you send it: what a top professional would do that you didn't ask for, the raw material they'd start from, their methods and tools, and an outside check that the result is right. hands back the rewritten prompt and leaves your choices open. doesn't do the task. runs only when you type `/sharpen`. |
 | [`/how`](./skills/how/SKILL.md) | you want a walkthrough of how a subsystem works. |
@@ -227,7 +227,7 @@ reflect:           /reflect that took too long. capture what we learned so the n
 correct:           /correct
 show-me-your-work: /show-me-your-work keep a decision trail i can review when i'm back.
 automate-me:       /automate-me
-help:              /poteto-help which skill should i use to review this branch?
+help:              /poteto-mode-help which skill should i use to review this branch?
 ```
 
 </details>
