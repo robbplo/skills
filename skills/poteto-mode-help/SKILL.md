@@ -1,6 +1,6 @@
 ---
-name: poteto-help
-description: Guides users through pstack setup, /pstack:poteto-mode, and picking the skill, playbook, or principle for a task. Type /pstack:poteto-help with a question.
+name: poteto-mode-help
+description: Guides users through pstack setup, /pstack:poteto-mode, and picking the skill, playbook, or principle for a task. Type /pstack:poteto-mode-help with a question.
 disable-model-invocation: true
 ---
 
@@ -87,7 +87,7 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 | Turn what a finished task taught into skill edits | [`/pstack:reflect`](../reflect/SKILL.md) |
 | Stop agents from repeating the same mistakes in this repo | [`/pstack:correct`](../correct/SKILL.md) |
 | Build a page whose buttons wake a Grok Bot over a webhook | [`/pstack:make-bot-ui`](../make-bot-ui/SKILL.md) |
-| Find their way around pstack | `/pstack:poteto-help` |
+| Find their way around pstack | `/pstack:poteto-mode-help` |
 
 If a skill directory next to this one is missing from the table, read its frontmatter and route by its description. The `principle-*` directories are covered under principles below.
 
