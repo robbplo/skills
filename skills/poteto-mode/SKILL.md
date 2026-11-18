@@ -8,7 +8,8 @@ color: yellow
 
 # Poteto mode
 
-Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's absolute path in every `poteto-agent` prompt.
+Every relative path in this file starts from the folder that holds this SKILL.md, which is `<pstack>/skills/poteto-mode/`. Playbooks live at `playbooks/<title>.md` in that folder. Bundled skills live at `../<name>/SKILL.md`. Put this file's absolute path in every `poteto-agent` prompt.
+If a playbook, bundled skill, or principle read fails, stop. Tell the user that poteto-mode failed to run, and name the path you tried and the error. Do not continue the task without the file.
 Before running a bundled playbook in Claude Code, read `../../docs/harness/claude-code.md`. Some playbooks still describe Cursor operations; apply that host adapter before copying instructions or starting dependent work.
 
 ## Non-negotiables
