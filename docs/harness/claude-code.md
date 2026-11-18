@@ -7,8 +7,8 @@ pstack skills use Claude Code names by default, but some bundled playbooks and r
 | Cursor | Claude Code |
 | --- | --- |
 | `Task` | `Agent` |
-| `AskQuestion` | `AskUserQuestion`. In `-p` mode it is absent, so ask in plain text. |
-| Open a todolist | Use `TodoWrite` if the session offers it. Otherwise keep the list in your reply and update it at each phase. |
+| `AskQuestion` | `AskUserQuestion`. |
+| Open a todolist | Use `TaskCreate`, which needs to be loaded using `ToolSearch`. Otherwise keep the list in your reply and update it at each phase. |
 | Run another pstack skill (`/name`, `/pstack:name`, or "the **name** skill") | Strip `pstack:` from the name, then `Read` `<pstack>/skills/<name>/SKILL.md` and follow it. The `Skill` tool refuses most pstack skills. When you tell the user to type it, write `/pstack:<name>`. |
 | `Grep`, `Glob` | `Bash` with `rg` when the session has no `Grep` or `Glob`. |
 
