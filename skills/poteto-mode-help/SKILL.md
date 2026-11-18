@@ -103,7 +103,7 @@ Close calls:
 Not in pstack:
 
 - Claude Code has no persistent `/loop` watcher. Use a bounded active-session check and save a checkpoint if the session ends. Use an available skill-authoring helper for `create-skill`.
-- pstack has no `/orchestrate` skill. Orchestrate is a `/pstack:poteto-mode` playbook. If the slash menu shows `/orchestrate`, another plugin provides it.
+- pstack has no `/orchestrate` skill. Orchestrate is a `/pstack:poteto-mode` playbook. If the slash menu shows it, another plugin provides it.
 
 ## Playbooks and principles
 
