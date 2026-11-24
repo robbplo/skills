@@ -1,7 +1,6 @@
 ---
 name: ship-pr
 description: "Take a finished branch from code-complete to merged: sync with the base branch, review and fix, have an independent subagent prove it, push, watch CI, merge on the user's word, then file open questions and deploy steps. Use for /ship-pr, or when the user says ship, land, get this merged, or merge the PR once CI passes."
-disable-model-invocation: true
 ---
 
 # Ship a PR
@@ -64,7 +63,7 @@ Run the narrow tests you changed and the project's fast static checks, then push
 ## 6. PR and CI
 
 1. Update the PR body to match the final diff, then mark the PR ready.
-2. Watch CI with the host's PR watcher if it has one. Otherwise poll the checks with the GitHub tools during the active session.
+2. Watch CI with the host's PR watcher if it has one. Otherwise run `gh pr checks --watch` in the background, so its exit wakes you. Never poll by hand.
 3. Read every review thread and bot comment. Triage each as fix, dismiss or ask, per `../poteto-mode/references/bugbot-triage.md`. Dismiss noise with a concrete reason in a reply on the thread.
 4. On a red check, find the root cause before you change anything. If the base branch is red for the same reason, the fix is its own PR on the base. Never retry, skip or quarantine a test to get to green.
 5. Stay quiet when a CI event changes nothing.

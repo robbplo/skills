@@ -18,17 +18,13 @@ const SUB_BLOCKS = [
 ];
 const PROGRAM_H3 = ["Arm the program", "Spawn owners", "PR mechanics", "Verdict and merge", "Boot recipe"];
 const HOST_REQUIREMENTS = new Map([
-	["cursor", {
-		markers: ["git show origin/main:", "/loop 1h", "status message"],
-		unsupported: [],
-	}],
 	["codex", {
 		markers: ["Read installed playbooks.", "Wake mechanism.", "status message"],
 		unsupported: [/\/loop\b/, /\bgit\s+show\s+\S+:pstack\//],
 	}],
 	["claude", {
 		markers: ["Read installed playbooks.", "Wake mechanism.", "status message"],
-		unsupported: [/\/loop\b/, /\bgit\s+show\s+\S+:pstack\//],
+		unsupported: [/\bgit\s+show\s+\S+:pstack\//],
 	}],
 ]);
 const HOW_TO_READ_MARKERS = [
@@ -41,7 +37,7 @@ const HOW_TO_READ_MARKERS = [
 const PERF_ITEMS = ["Metric.", "Probe.", "Baseline.", "Rule."];
 const BOX = /^\s*- \[[ x]\] (.*)$/;
 
-let host = "cursor";
+let host = "claude";
 let hostSpecified = false;
 let file;
 let invalidArgs = false;
@@ -57,7 +53,7 @@ for (let i = 0; i < args.length; i++) {
 	}
 }
 if (invalidArgs || !file || !HOST_REQUIREMENTS.has(host)) {
-	console.error("Usage: node check-plan.mjs [--host cursor|codex|claude] <plan.md>");
+	console.error("Usage: node check-plan.mjs [--host claude|codex] <plan.md>");
 	process.exit(2);
 }
 const hostRequirements = HOST_REQUIREMENTS.get(host);

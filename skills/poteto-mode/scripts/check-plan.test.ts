@@ -20,7 +20,8 @@ ${rule}
 ### PR mechanics
 ### Verdict and merge
 ### Boot recipe
-\`git show origin/main:\` /loop 1h status message
+- [ ] Read installed playbooks. Read \`/home/user/.claude/plugins/pstack/skills/poteto-mode/playbooks/autopilot-stack.md\` at every audit.
+- [ ] Wake mechanism. Poll during the active session every 30 seconds until the program finishes or the operator stops it. Report each tracked change in a status message.
 
 ## PR 1
 **Depends on.** None.
@@ -63,52 +64,50 @@ const runPlan = (example: string, expectedExit: number, plan = validPlan, args: 
 	}
 };
 
-const codexPlan = validPlan.replace(
-	"`git show origin/main:` /loop 1h status message",
-	"- [ ] Read installed playbooks. Read `/home/user/.codex/pstack-local/skills/poteto-mode/playbooks/autopilot-stack.md` at every audit.\n" +
-		"- [ ] Wake mechanism. Poll during the active session every 30 seconds until the program finishes or the operator stops it. Report each tracked change in a status message.",
-);
-
 test("accepts a Codex plan with installed sources and in-session polling", () => {
-	runPlan("", 0, codexPlan, ["--host", "codex"]);
+	runPlan("", 0, validPlan, ["--host", "codex"]);
 });
 
 test("accepts a Claude Code plan with installed sources and in-session polling", () => {
-	runPlan("", 0, codexPlan, ["--host", "claude"]);
+	runPlan("", 0, validPlan, ["--host", "claude"]);
 });
 
-test("rejects Cursor-only instructions in Claude Code plans", () => {
-	for (const command of ["/loop 1h", "git show origin/main:pstack/skills/swarm/SKILL.md"]) {
-		const plan = codexPlan.replace("### Arm the program", `### Arm the program\n- [ ] Run \`${command}\`.`);
-		const result = runPlan("", 1, plan, ["--host", "claude"]);
-		expect(result.stderr).toContain("unsupported in Claude Code");
-	}
+const withCommand = (command: string) =>
+	validPlan.replace("### Arm the program", `### Arm the program\n- [ ] Run \`${command}\`.`);
+
+test("accepts a loop in Claude Code plans", () => {
+	runPlan("", 0, withCommand("/loop 1h"), ["--host", "claude"]);
+});
+
+test("rejects trunk reads in Claude Code plans", () => {
+	const result = runPlan("", 1, withCommand("git show origin/main:pstack/skills/swarm/SKILL.md"), ["--host", "claude"]);
+	expect(result.stderr).toContain("unsupported in Claude Code");
 });
 
 test("requires each Codex program instruction", () => {
 	for (const marker of ["Read installed playbooks.", "Wake mechanism.", "status message"]) {
-		const result = runPlan("", 1, codexPlan.replace(marker, "Removed instruction."), ["--host", "codex"]);
+		const result = runPlan("", 1, validPlan.replace(marker, "Removed instruction."), ["--host", "codex"]);
 		expect(result.stderr).toContain(`Program checklist lacks "${marker}"`);
 	}
 });
 
-test("rejects Cursor loop and repository-local protocol commands in Codex plans", () => {
+test("rejects a written loop and repository-local protocol commands in Codex plans", () => {
 	for (const command of ["/loop 1h", "git show origin/main:pstack/skills/swarm/SKILL.md"]) {
-		const plan = codexPlan.replace("### Arm the program", `### Arm the program\n- [ ] Run \`${command}\`.`);
+		const plan = validPlan.replace("### Arm the program", `### Arm the program\n- [ ] Run \`${command}\`.`);
 		const result = runPlan("", 1, plan, ["--host", "codex"]);
 		expect(result.stderr).toContain("unsupported in Codex");
 	}
 });
 
-test("keeps explicit Cursor host validation", () => {
-	runPlan("", 0, validPlan, ["--host", "cursor"]);
-	const result = runPlan("", 1, codexPlan, ["--host", "cursor"]);
-	expect(result.stderr).toContain('Program checklist lacks "/loop 1h"');
+test("defaults to the Claude Code host", () => {
+	runPlan("", 0);
+	const result = runPlan("", 1, validPlan.replace("Wake mechanism.", "Removed instruction."));
+	expect(result.stderr).toContain('Program checklist lacks "Wake mechanism."');
 });
 
 test("rejects missing, unknown, and repeated hosts before reading the plan", () => {
-	for (const args of [["--host", "unknown"], ["--host"], ["--host", "codex", "--host", "cursor"]]) {
-		const result = runPlan("", 2, codexPlan, args);
+	for (const args of [["--host", "unknown"], ["--host"], ["--host", "codex", "--host", "claude"]]) {
+		const result = runPlan("", 2, validPlan, args);
 		expect(result.stderr).toContain("Usage:");
 	}
 	const missingHost = spawnSync("node", [checker, "/nonexistent/plan.md", "--host"], { encoding: "utf8" });

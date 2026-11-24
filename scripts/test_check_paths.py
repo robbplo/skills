@@ -12,7 +12,6 @@ class CheckPathsTest(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix='pstack-check-paths-')
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        self.write('docs/harness/claude-code.md', '| The `create-skill` skill | Run `/skill-creator`. |\n')
         self.write('skills/principle-prove-it-works/SKILL.md', '# Prove\n')
         self.write('skills/alpha/SKILL.md', '# Alpha\n')
         self.write('skills/alpha/references/notes.md', 'Notes.\n')
@@ -27,8 +26,9 @@ class CheckPathsTest(unittest.TestCase):
         return result.returncode, result.stdout.splitlines()
 
     def test_clean_tree_passes(self):
+        self.write('README.md', 'Readme.\n')
         self.write('skills/alpha/SKILL.md', 'Read `references/notes.md` and the **principle-prove-it-works** skill. Keep `AGENTS.md`.\n')
-        self.write('skills/alpha/references/guide.md', 'See `references/notes.md`, `../../docs/harness/claude-code.md`, and the `create-skill` skill.\n')
+        self.write('skills/alpha/references/guide.md', 'See `references/notes.md`, `../../README.md`, and the `/loop` skill.\n')
         self.assertEqual(self.run_check(), (0, []))
 
     def test_skill_folder_path_that_does_not_exist_fails(self):
@@ -56,10 +56,10 @@ class CheckPathsTest(unittest.TestCase):
             'skills/alpha/SKILL.md:1: **prove-it-works** names no skill; write **principle-prove-it-works**',
         ])
 
-    def test_unknown_slash_skill_fails_unless_mapped_or_denied(self):
-        self.write('skills/alpha/SKILL.md', 'Chart with `/visualize`. Author with `/skill-creator`. pstack has no `/orchestrate` skill.\n')
+    def test_unknown_slash_skill_fails_unless_claude_code_ships_it_or_denied(self):
+        self.write('skills/alpha/SKILL.md', 'Chart with `/visualize`. Poll with `/loop`. pstack has no `/orchestrate` skill.\n')
         _, out = self.run_check()
-        self.assertEqual(out, ['skills/alpha/SKILL.md:1: visualize names no skill in skills/ and has no row in docs/harness/claude-code.md'])
+        self.assertEqual(out, ['skills/alpha/SKILL.md:1: visualize names no skill in skills/ and is not in CLAUDE_CODE_SKILLS'])
 
     def test_line_numbers_survive_fenced_blocks(self):
         self.write('skills/alpha/SKILL.md', 'Intro.\n\n```\ncode\n```\nRead `playbooks/missing.md`.\n')

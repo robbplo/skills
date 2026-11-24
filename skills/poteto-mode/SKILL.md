@@ -1,20 +1,17 @@
 ---
 name: poteto-mode
 description: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /pstack:poteto-mode, or requests to work in this style.
-disable-model-invocation: true
-icon: crown
-color: yellow
 ---
 
 # Poteto mode
 
-Every relative path in this skill, including its playbooks and references, starts from the folder that holds this SKILL.md, which is `<pstack>/skills/poteto-mode/`. Playbooks live at `playbooks/<title>.md` in that folder. Bundled skills live at `../<name>/SKILL.md`. Put this file's absolute path in every `poteto-agent` prompt.
+Every relative path in this skill, including its playbooks and references, starts from the folder that holds this SKILL.md, which is `${CLAUDE_SKILL_DIR}`. `<pstack>` is the plugin root, `${CLAUDE_PLUGIN_ROOT}`. If either still shows a `${...}` placeholder, the first is this file's folder and the second is two levels above it. Playbooks live at `playbooks/<title>.md` in that folder. Bundled skills live at `../<name>/SKILL.md`.
 If a playbook, bundled skill, or principle read fails, stop. Tell the user that poteto-mode failed to run, and name the path you tried and the error. Do not continue the task without the file.
-Before running a bundled playbook in Claude Code, read `../../docs/harness/claude-code.md`. Some playbooks still describe Cursor operations; apply that host adapter before copying instructions or starting dependent work.
+Run another pstack skill, written as `/pstack:<name>` or as its name in bold, with the `Skill` tool as `pstack:<name>`. Four skills take only the user's own command: `reflect`, `automate-me`, `correct`, and `robbin-mode`. Tell the user to type `/pstack:<name>` for those. When the session has no `Grep` or `Glob`, search with `rg` through `Bash`.
 
 ## Non-negotiables
 
-The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose leaf SKILL.md you read this session.
+The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose leaf skill you loaded this session.
 
 Remaining triggers:
 
@@ -26,7 +23,7 @@ Remaining triggers:
 - Parallel fan-out → the **swarm** skill for coverage matrices, races, gauntlets, and exploration partitions. Use **arena** for design or code bakeoffs with base selection and grafting.
 - Contested design → the **interrogate** skill (multi-model adversarial) before shipping.
 - Nontrivial multi-step → write the throughput checkpoint (Feature step 3).
-- Any prose surface, your reply to the user included → the **unslop** skill. Write the reply per **Writing the reply**. Agent-facing prose also follows the **create-skill** skill (for authoring SKILL.md files).
+- Any prose surface, your reply to the user included → the **unslop** skill. Write the reply per **Writing the reply**. Agent-facing prose also follows the `anthropic-skills:skill-creator` skill (for authoring SKILL.md files).
 - Docs, RFCs, readmes, PR descriptions, or commit messages → the **technical-writing** skill (`/pstack:technical-writing`).
 - Before commit → the **deslop** skill (`/pstack:deslop`).
 - Before review → the **no-comments** skill (`/pstack:no-comments`).
@@ -40,7 +37,7 @@ Remaining triggers:
 
 ## Principles
 
-Read the leaf skill in full for any principle you apply. Each entry names when it applies. Each leaf is the **principle-<title>** skill, with the title in kebab case, hyphens kept and other punctuation dropped, unless the entry gives its name.
+Load the leaf skill for any principle you apply. Each entry names when it applies. Each leaf is the **principle-<title>** skill, with the title in kebab case, hyphens kept and other punctuation dropped, unless the entry gives its name.
 
 **Core**
 
@@ -95,9 +92,9 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 **Use `subagent_type: "pstack:poteto-agent"` for subagents inside a playbook step.** The chat that receives `/pstack:poteto-mode` runs the playbook. Routed workflow skills set their own agent types. Respect those choices.
 
-**Defaults for every `Agent` call.** Subagents run in the background by default. Keep a steer or resume of a running agent in the background too, because a foreground call holds your turn while other reports wait. Put file paths in the brief. Use the role's model from `../../config/claude-models.md`. If its line is absent, use `inherit-parent` for code, `sonnet` for mechanical and clerical work, and `opus xhigh` for prose and judgment. An `auto` or `inherit-parent` value omits `model`. Set `model` to `opus`, `sonnet`, `haiku`, or `fable` and `effort` separately. Never pass a Cursor model slug, or `run_in_background` unless a skill asks for a foreground run. The code playbooks use their named role lines. The hardest tasks use `hardest tasks`; prose and judgment use `judgment and prose`. Clerical delegates with no design or prose judgment (filing issues, re-pinning tests, merging cross-links, applying a decided edit) use `mechanical and clerical`, never `judgment and prose`.
+**Defaults for every `Agent` call.** Subagents run in the background by default. Keep a steer or resume of a running agent in the background too, because a foreground call holds your turn while other reports wait. Put file paths in the brief. Use the role's model from `../../config/claude-models.md`. If its line is absent, use `inherit-parent` for code, `sonnet` for mechanical and clerical work, and `opus xhigh` for prose and judgment. An `auto` or `inherit-parent` value omits `model`. Set `model` to `opus`, `sonnet`, `haiku`, or `fable` and `effort` separately. Never pass `run_in_background` unless a skill asks for a foreground run. The code playbooks use their named role lines. The hardest tasks use `hardest tasks`; prose and judgment use `judgment and prose`. Clerical delegates with no design or prose judgment (filing issues, re-pinning tests, merging cross-links, applying a decided edit) use `mechanical and clerical`, never `judgment and prose`.
 
-**Match the model to the job.** Start at the role's configured effort. Raise it one step for subtle work and lower it for routine work, within the `Agent` tool's supported values. Claude Code has no `-fast` model setting. A model or effort counts as rejected once an `Agent` error says it is not valid. Never pass a rejected value again. Use the role's line or default, then the calling skill's fallback, skipping any already rejected. When those run out, omit `model` so the subagent runs on the session model. Say so in every case.
+**Match the model to the job.** Start at the role's configured effort. Raise it one step for subtle work and lower it for routine work, within the `Agent` tool's supported values. A model or effort counts as rejected once an `Agent` error says it is not valid. Never pass a rejected value again. Use the role's line or default, then the calling skill's fallback, skipping any already rejected. When those run out, omit `model` so the subagent runs on the session model. Say so in every case.
 
 You own every subagent's work. Review the diff and write your own summary, don't pass through what it said. A second opinion is the same prompt against a different model. Agreement is high-signal.
 
@@ -123,7 +120,7 @@ Comments follow the same rule as the reply. Write them clean as you go. Keep a c
 
 ## Playbooks
 
-Open a todolist whose first items are the matched playbook's steps, copied in verbatim, before any task-specific todos. A step you choose not to do stays in the list with a one-line `skip: <reason>`. Match the task to a playbook below and open its full steps at `playbooks/<title>.md`, with the title in kebab case, hyphens kept and other punctuation dropped, unless the entry gives its file. Copy its steps in verbatim. Keep the list true as you work. Set an item to `in_progress` in the same message that starts or delegates its step. Set it to `completed` when you have reviewed the evidence. Create a step that earlier work already satisfied as `completed`, and cite that evidence in its description. When one delegate owns several steps, add a child todo for each unit in its brief, such as each commit, and tick them off at hand-back. Reconcile the list before every message that ends your turn. A background delegate ends your turn, so a list you do not update stays frozen until the next wake.
+Open a todo list whose first items are the matched playbook's steps, copied in verbatim, before any task-specific todos. Keep it with the session's task-list tool, whichever the session offers. With none, keep the list in your reply and update it at each phase. This holds for every todo list a pstack skill opens. A step you choose not to do stays in the list with a one-line `skip: <reason>`. Match the task to a playbook below and open its full steps at `playbooks/<title>.md`, with the title in kebab case, hyphens kept and other punctuation dropped, unless the entry gives its file. Copy its steps in verbatim. Keep the list true as you work. Set an item to `in_progress` in the same message that starts or delegates its step. Set it to `completed` when you have reviewed the evidence. Create a step that earlier work already satisfied as `completed`, and cite that evidence in its description. When one delegate owns several steps, add a child todo for each unit in its brief, such as each commit, and tick them off at hand-back. Reconcile the list before every message that ends your turn. A background delegate ends your turn, so a list you do not update stays frozen until the next wake.
 
 A large or cross-cutting effort (a migration across many call sites, an ambitious multi-part change), or work the user steps away from to trust later, routes to the **figure-it-out** skill even when a narrower playbook like Feature fits. Use **figure-it-out** whenever no bundled playbook fits. It designs a bespoke, rigorous playbook for the task. A standing project-scale program (multi-day, many stacked PRs, a fleet of subagents under one coordinator) routes to **Orchestrate** instead. figure-it-out designs one bespoke run, orchestrate runs the program.
 
@@ -145,7 +142,7 @@ A large or cross-cutting effort (a migration across many call sites, an ambitiou
 - **Orchestrate.** A standing project handed to one coordinator chat: multi-day, many stacked PRs, dozens to hundreds of subagents, minimal human turns ("run this whole project", "own this migration until it lands"). Distinct from Autonomous run, which drives one task to a predicate. Work one agent could finish inside the session's budget routes there, not here, however program-shaped the phrasing sounds.
 - **Autopilot-full.** A queue of independent PRs run to merged with full autonomy. One owner per PR carries build through merge, and the root swarm-verifies each PR before its owner merges ("autopilot this queue", "full autopilot", one-owner-per-PR programs).
 - **Autopilot-stack.** Autopilot-full without the merge. A queue of PRs built and verified with full autonomy, then handed to the operator to land. A PR stacks only on a PR it builds on ("autopilot-stack", "autopilot, don't merge", "stack them, don't ship", "build the stack, I'll land it").
-- **Session pickup.** Resuming or taking over a prior agent's in-flight work from a transcript, cloud-agent URL, or pushed branch.
+- **Session pickup.** Resuming or taking over a prior agent's in-flight work from a transcript, cloud session link, or pushed branch.
 - **Pause safely.** Suspending in-flight work cleanly so it can be resumed, on an explicit pause, going offline, a Claude Code restart, or imminent context compaction. The complement to Session pickup.
 - **Multi-phase or multi-PR plan.** Work that spans phases or stacked PRs. File: `playbooks/multi-phase-plan.md`.
 - **Worktree and simulator cleanup.** Reclaiming local disk by pruning merged or abandoned git worktrees and stale iOS simulators ("what's using my disk", "clean up worktrees", "prune safe-to-prune worktrees", "free up space", "delete old simulators"). File: `playbooks/worktree-cleanup.md`.

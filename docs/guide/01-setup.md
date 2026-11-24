@@ -4,19 +4,18 @@ In this page you install the plugin, pick which models pstack uses, and run your
 
 ## Install the plugin
 
-In a Cursor chat, run:
+In Claude Code, run:
 
 ```text
-/add-plugin pstack
+/plugin marketplace add robbplo/skills
+/plugin install pstack@robbplo-skills
 ```
 
-Cursor confirms the plugin is installed.
-
-In Claude Code, run `/plugin marketplace add robbplo/skills`, then `/plugin install pstack@robbplo-skills`. Claude Code prefixes plugin commands, so each command in this guide takes a `pstack:` prefix there, such as `/pstack:poteto-mode`. The [Claude Code adapter](../harness/claude-code.md) covers the other differences.
+Claude Code prefixes plugin commands, so each command in this guide takes a `pstack:` prefix when you type it, such as `/pstack:poteto-mode`.
 
 ## Pick your models
 
-Cursor reads the Claude file. The model choices live in [`config/claude-models.md`](../../config/claude-models.md) (Claude Code) and [`config/codex-models.md`](../../config/codex-models.md) (Codex). To change them, fork the repo, edit the file, and install your fork. Edits inside an installed plugin copy are lost on update. The files are plain Markdown with one line per role (code delegates, judgment, the review panels).
+The model choices live in [`config/claude-models.md`](../../config/claude-models.md) (Claude Code) and [`config/codex-models.md`](../../config/codex-models.md) (Codex). To change them, fork the repo, edit the file, and install your fork. Edits inside an installed plugin copy are lost on update. The files are plain Markdown with one line per role (code delegates, judgment, the review panels).
 
 You only override what you care about. A role with no line keeps the skill's default. To restore a default, delete that role's line.
 
@@ -24,7 +23,7 @@ You might be wondering what happens if you use Auto. Set a role to `inherit-pare
 
 ## Add a verification skill
 
-If your project has no `verify-*` skill or other harness that proves app behavior, generate one with [`/create-verification-skill`](../../skills/create-verification-skill/SKILL.md). It writes `.claude/skills/verify-<app>/` (`.cursor/skills/verify-<app>/` in Cursor), a project-local skill that teaches agents to drive your app the way a user does. It proves the skill works once before handing it over. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers it in depth.
+If your project has no `verify-*` skill or other harness that proves app behavior, generate one with [`/create-verification-skill`](../../skills/create-verification-skill/SKILL.md). It writes `.claude/skills/verify-<app>/`, a project-local skill that teaches agents to drive your app the way a user does. It proves the skill works once before handing it over. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers it in depth.
 
 If you're new to pstack, do this. An agent that can check its own work keeps going until the check passes. An agent that can't hands every result back to you to check by hand.
 
@@ -51,6 +50,6 @@ Pick something real but small, and describe it the way you'd describe it to a co
 
 Watch the todo list. Its first items are the matched playbook's steps copied in, the Feature playbook for this prompt. If `/poteto-mode` skips a step, the step stays in the list with `skip: <reason>`, so you can see what it chose not to do.
 
-From here you can type normal follow-ups. To keep `/poteto-mode` on for the whole chat, pick it from the `/` menu with Option+Enter (Mac) or Alt+Enter (Windows) instead of Enter. That makes it a [Custom Mode](https://cursor.com/docs/skills#using-a-skill-as-a-custom-mode), which stays in context on every turn until you exit it. Custom Modes are available in the Agents Window and the CLI. Plain Enter attaches the skill to one message, and it fades as the chat moves on.
+From here you can type normal follow-ups. The skill fades as the chat moves on, so type `/pstack:poteto-mode` again when a new task starts.
 
 Next: [Route work through `/poteto-mode`](./02-poteto-mode.md).

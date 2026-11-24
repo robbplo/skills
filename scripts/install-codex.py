@@ -65,15 +65,16 @@ def render_pack(stage: Path, pack: Path):
     (stage / MARKER).write_text(f'Source: {SOURCE}\n')
     adapter = pack / 'docs/harness/codex.md'
     prelude = (f'## Codex host instructions\n\nBefore doing any work, read `{adapter}` '
-               'and apply its host mappings instead of Cursor/Claude-specific instructions below. '
+               'and apply its host mappings instead of the Claude Code instructions below. '
                f'Read `{pack / "models.md"}`. '
                'Pass this adapter path to every delegate.\n\n')
     for name, (front, body) in parsed.items():
         explicit_only = 'disable-model-invocation: true' in front
         front = '\n'.join(line for line in front.splitlines() if not line.startswith(
-            ('disable-model-invocation:', 'user-invocable:', 'icon:', 'color:')))
+            ('disable-model-invocation:', 'user-invocable:')))
         dest = stage / 'skills' / name / 'SKILL.md'
         body = body.replace(CLAUDE_MODELS, CODEX_MODELS)
+        body = body.replace('${CLAUDE_PLUGIN_ROOT}', str(pack)).replace('${CLAUDE_SKILL_DIR}', str(pack / 'skills' / name))
         dest.write_text('---\n' + front + '\n---\n\n' + prelude + body.lstrip())
         if explicit_only:
             metadata = dest.parent / 'agents' / 'openai.yaml'

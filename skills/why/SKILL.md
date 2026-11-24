@@ -1,7 +1,6 @@
 ---
 name: why
 description: "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCPs and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior."
-disable-model-invocation: true
 ---
 
 # Why
@@ -10,7 +9,7 @@ Investigate the motivation and intent behind code. The companion `how` skill ans
 
 Each spawn below names a role line in the `../../config/claude-models.md` file and a default. Set `model` and `effort` from that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
-Every spawn uses `subagent_type: "general-purpose"` to retain MCP access. Do not use `Explore`; the investigators and synthesizer need MCP access to check sources. Investigators still shouldn't write anything.
+Every spawn uses `subagent_type: "general-purpose"` and `isolation: "worktree"`. The investigators and synthesizer check sources through MCP. The worktree keeps any edit they make out of your checkout. A worktree holds only committed code, so paste any uncommitted diff the question depends on into the brief.
 
 ## Operating Posture
 

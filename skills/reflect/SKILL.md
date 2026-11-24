@@ -12,17 +12,11 @@ Invoke when the user says "reflect" or "/pstack:reflect". Skip when the conversa
 
 ## 1. Locate the active transcript
 
-Before fanning out, find this conversation's transcript under `~/.claude/projects/<slug>/`, where the slug replaces each `/` and `.` in the workspace path with `-`. Read only this workspace's folder.
-
-```bash
-find ~/.claude/projects/<slug> -maxdepth 1 -name '*.jsonl' -type f
-```
-
-Use a session ID supplied by the host when available. Otherwise inspect user-message records in the candidate files and match this conversation's opening user prompt and later context. Do not choose by modification time alone, and do not assume the first JSONL record is a user message. If no file matches uniquely, pass a tight digest of this session instead. A matched session's `<session>/subagents/` folder holds its subagent transcripts.
+Before fanning out, find this conversation's transcript. Run `../poteto-mode/scripts/transcript-dir.sh` for this workspace's transcript folder. This session's file there is `${CLAUDE_SESSION_ID}.jsonl`. If that name still shows a `${...}` placeholder or the file is missing, inspect user-message records in the folder's `.jsonl` files and match this conversation's opening user prompt and later context. Do not choose by modification time alone, and do not assume the first JSONL record is a user message. If no file matches uniquely, pass a tight digest of this session instead. A matched session's `<session>/subagents/` folder holds its subagent transcripts.
 
 ## 2. Spawn three reviewers in parallel
 
-One message, three `Agent` calls with `subagent_type: "general-purpose"`. Reviewers need MCP access to look up the tickets, chat threads, and observability traces the transcript references, and readonly strips MCPs.
+One message, three `Agent` calls with `subagent_type: "general-purpose"` and `isolation: "worktree"`. Reviewers look up the tickets, chat threads, and observability traces the transcript references through MCP. The worktree keeps any edit a reviewer makes out of your checkout.
 
 Each reviewer and the synthesizer name a role line in the `../../config/claude-models.md` file and a default. Set `model` and `effort` from that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
@@ -36,7 +30,7 @@ Pass each template verbatim, substituting the transcript path or digest where ma
 
 ## 3. Synthesize
 
-One `Agent` call with `subagent_type: "general-purpose"` and `model` from the `reflect judgment, divergent, synthesizer` line (default `opus xhigh`). It spot-verifies citations through MCP, and readonly strips MCPs. Pass `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. It returns an Accepted / Rejected / Backlog list.
+One `Agent` call with `subagent_type: "general-purpose"`, `isolation: "worktree"`, and `model` from the `reflect judgment, divergent, synthesizer` line (default `opus xhigh`). It spot-verifies citations through MCP. Pass `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. It returns an Accepted / Rejected / Backlog list.
 
 ## 4. Structural enforcement check
 
@@ -53,9 +47,9 @@ Never edit a skill under `plugins/cache/`. Before approval, show its destination
 Follow each approved row's Routing exactly:
 
 - Trivial existing-skill edit (a one-line bullet, a tightened sentence, a stale fact corrected): the parent does it directly.
-- Substantive existing-skill edit (a new section, a new pattern table, more than ~10 lines): hand to the available `create-skill` skill and run its draft / test / iterate loop.
-- `tune description: <skill path>` (the skill exists but didn't trigger when it should have): hand to `create-skill` and run its description-optimization loop.
-- `new skill via create-skill: <kebab-name>`: hand creation to `create-skill`. Do not invent the shape ad hoc.
+- Substantive existing-skill edit (a new section, a new pattern table, more than ~10 lines): hand to the `anthropic-skills:skill-creator` skill and run its draft / test / iterate loop.
+- `tune description: <skill path>` (the skill exists but didn't trigger when it should have): hand to `anthropic-skills:skill-creator` and run its description-optimization loop.
+- `new skill via skill-creator: <kebab-name>`: hand creation to `anthropic-skills:skill-creator`. Do not invent the shape ad hoc.
 
 If your environment ships a SKILL.md validator, run it on every touched skill before declaring done.
 

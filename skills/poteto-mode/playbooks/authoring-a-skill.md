@@ -2,7 +2,7 @@
 
 **You own the skill's voice.**
 
-1. Use the **create-skill** skill (Cursor's built-in for authoring SKILL.md files).
+1. Use the `anthropic-skills:skill-creator` skill to author the SKILL.md.
 2. Validate the skill: frontmatter has `name` and `description`, referenced files exist, cross-skill links resolve. After any skill edit, run `python3 ../../scripts/check-paths.py` and fix every line it prints.
 3. Test cases if structural. Skip if subjective.
 4. Run **Opening a PR**.

@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -43,13 +44,16 @@ class WorktreeAuditTests(unittest.TestCase):
         self.git('add', 'tracked.txt')
         self.git('commit', '-m', 'Fixture')
         self.git('worktree', 'add', '-b', 'active', str(self.worktree))
-        slug = str(self.repo).lstrip('/').replace('/', '-')
-        cursor = self.home / '.cursor/projects' / slug / 'agent-transcripts/chat record.jsonl'
-        cursor.parent.mkdir(parents=True)
-        cursor.write_text(json.dumps({'cwd': str(self.worktree)}) + '\n')
+        self.write_claude_chat(self.repo)
         codex = self.home / '.codex/sessions/2026/10/27/session.jsonl'
         codex.parent.mkdir(parents=True)
         codex.write_text(json.dumps({'type': 'session_meta', 'payload': {'cwd': str(self.worktree)}}) + '\n')
+
+    def write_claude_chat(self, started_in, name='chat record.jsonl', config='.claude'):
+        slug = re.sub(r'[^A-Za-z0-9]', '-', str(started_in))
+        chat = self.home / config / 'projects' / slug / name
+        chat.parent.mkdir(parents=True)
+        chat.write_text(json.dumps({'cwd': str(self.worktree)}) + '\n')
 
     def git(self, *args):
         result = subprocess.run(['git', '-C', str(self.repo), *args], env=self.env,
@@ -70,27 +74,46 @@ class WorktreeAuditTests(unittest.TestCase):
         self.assertEqual(row['WORKTREE'], str(self.worktree))
         return row
 
-    def test_codex_activity_stays_unknown_without_reading_cursor_history(self):
+    def test_codex_activity_stays_unknown_without_reading_claude_history(self):
         row = self.row(self.audit('--host', 'codex'))
         self.assertEqual(row['MERGED'], 'YES')
         self.assertEqual(row['LAST_CHAT'], 'unknown')
         self.assertEqual(row['BUCKET'], 'verify-activity')
         self.assertFalse(self.rg_log.exists())
 
-    def test_claude_activity_stays_unknown_without_reading_cursor_history(self):
-        row = self.row(self.audit('--host', 'claude'))
-        self.assertEqual(row['LAST_CHAT'], 'unknown')
-        self.assertEqual(row['BUCKET'], 'verify-activity')
-        self.assertFalse(self.rg_log.exists())
-
-    def test_unspecified_host_stays_unknown_without_reading_cursor_history(self):
+    def test_unspecified_host_stays_unknown_without_reading_claude_history(self):
         row = self.row(self.audit())
         self.assertEqual(row['LAST_CHAT'], 'unknown')
         self.assertEqual(row['BUCKET'], 'verify-activity')
         self.assertFalse(self.rg_log.exists())
 
-    def test_explicit_cursor_recognizes_recent_chat(self):
-        row = self.row(self.audit('--host', 'cursor'))
+    def test_claude_recognizes_recent_chat_started_in_the_worktree(self):
+        shutil.rmtree(self.home / '.claude')
+        self.write_claude_chat(self.worktree)
+        row = self.row(self.audit('--host', 'claude'))
+        self.assertEqual(row['BUCKET'], 'verify-recent-chat')
+
+    def test_claude_recognizes_a_subagent_of_a_chat_in_another_worktree(self):
+        shutil.rmtree(self.home / '.claude')
+        self.write_claude_chat(self.repo / '.claude/worktrees/parent', 'session/subagents/agent-1.jsonl')
+        row = self.row(self.audit('--host', 'claude'))
+        self.assertEqual(row['BUCKET'], 'verify-recent-chat')
+
+    def test_claude_reads_the_configured_claude_folder(self):
+        shutil.rmtree(self.home / '.claude')
+        self.write_claude_chat(self.repo, config='cloud-config')
+        self.env['CLAUDE_CONFIG_DIR'] = str(self.home / 'cloud-config')
+        row = self.row(self.audit('--host', 'claude'))
+        self.assertEqual(row['BUCKET'], 'verify-recent-chat')
+
+    def test_claude_without_a_chat_reports_none_observed(self):
+        shutil.rmtree(self.home / '.claude')
+        row = self.row(self.audit('--host', 'claude'))
+        self.assertEqual(row['LAST_CHAT'], '-')
+        self.assertEqual(row['BUCKET'], 'safe')
+
+    def test_claude_recognizes_recent_chat_started_in_the_main_checkout(self):
+        row = self.row(self.audit('--host', 'claude'))
         self.assertNotEqual(row['LAST_CHAT'], '-')
         self.assertNotEqual(row['LAST_CHAT'], 'unknown')
         self.assertEqual(row['BUCKET'], 'verify-recent-chat')
@@ -117,7 +140,7 @@ class WorktreeAuditTests(unittest.TestCase):
         self.assertEqual(row['LAST_CHAT'], 'unknown')
 
     def test_invalid_or_missing_host_is_a_usage_error(self):
-        for args in (('--host', 'other'), ('--host',)):
+        for args in (('--host', 'unknown'), ('--host',)):
             result = self.audit(*args)
             self.assertEqual(result.returncode, 2)
             self.assertIn('host', result.stderr)

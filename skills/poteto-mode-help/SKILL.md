@@ -1,7 +1,6 @@
 ---
 name: poteto-mode-help
 description: Guides users through pstack setup, /pstack:poteto-mode, and picking the skill, playbook, or principle for a task. Type /pstack:poteto-mode-help with a question.
-disable-model-invocation: true
 ---
 
 # Poteto help
@@ -37,7 +36,7 @@ Installing changes nothing until the user invokes a skill. The [README](../../RE
 
 If cost is the worry, say where the tokens go and how to spend fewer. pstack spends extra tokens on subagents and review panels. Pick cheaper models in a fork's [`config/claude-models.md`](../../config/claude-models.md). A role set to `auto` or `inherit-parent` runs on the chat's model, which saves tokens when the chat runs on Auto or a cheaper model. A shorter panel list runs fewer subagents, one for each entry. Save `/pstack:poteto-mode` for work that needs rigor.
 
-In Claude Code, pstack commands take the `pstack:` prefix. Cursor-only steps are skipped with a one-line reason.
+pstack commands take the `pstack:` prefix, because Claude Code prefixes plugin commands.
 
 Other tools can read these Agent Skills files. Host-specific agent fields and persistent scheduling need their own mappings.
 
@@ -86,7 +85,6 @@ The default answer is `/pstack:poteto-mode`, which runs most of the others when 
 | Turn their own working habits into a personal mode skill | [`/pstack:automate-me`](../automate-me/SKILL.md) |
 | Turn what a finished task taught into skill edits | [`/pstack:reflect`](../reflect/SKILL.md) |
 | Stop agents from repeating the same mistakes in this repo | [`/pstack:correct`](../correct/SKILL.md) |
-| Build a page whose buttons wake a Grok Bot over a webhook | [`/pstack:make-bot-ui`](../make-bot-ui/SKILL.md) |
 | Find their way around pstack | `/pstack:poteto-mode-help` |
 
 If a skill directory next to this one is missing from the table, read its frontmatter and route by its description. The `principle-*` directories are covered under principles below.
@@ -102,7 +100,7 @@ Close calls:
 
 Not in pstack:
 
-- Claude Code has no persistent `/loop` watcher. Use a bounded active-session check and save a checkpoint if the session ends. Use an available skill-authoring helper for `create-skill`.
+- `/loop` is Claude Code's skill and `anthropic-skills:skill-creator` is Anthropic's. Neither is a pstack skill. A `/loop` stops when the session ends. `/schedule` runs a cloud agent that goes on with the laptop closed. [`wakes.md`](../poteto-mode/references/wakes.md) says which to use.
 - pstack has no `/orchestrate` skill. Orchestrate is a `/pstack:poteto-mode` playbook. If the slash menu shows it, another plugin provides it.
 
 ## Playbooks and principles

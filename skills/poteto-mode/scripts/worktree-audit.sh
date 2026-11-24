@@ -4,9 +4,9 @@
 # operated in it. Emits a table sorted by size with a suggested bucket. Never
 # deletes anything; deletion stays a human-gated step in the playbook.
 #
-# Usage: worktree-audit.sh [--host codex|cursor|claude] [-b|--base <ref>] [repo-path]
+# Usage: worktree-audit.sh [--host claude|codex] [-b|--base <ref>] [repo-path]
 #   repo-path defaults to the current repo.
-#   Only --host cursor scans transcripts. Other runs report unknown activity.
+#   Only --host claude scans transcripts. Other runs report unknown activity.
 #   -b sets the ref the MERGED column checks against (e.g. origin/integration).
 #   Without it the base is origin/HEAD, then origin/main, then origin/master.
 #   origin/HEAD is the remote's default branch, not necessarily the branch PRs
@@ -19,8 +19,8 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 	-b|--base) [ $# -ge 2 ] || { echo "error: $1 needs a ref" >&2; exit 2; }; base="$2"; shift 2 ;;
 	--host)
-		[ $# -ge 2 ] || { echo "error: --host needs codex, cursor, or claude" >&2; exit 2; }
-		case "$2" in codex|cursor|claude) host="$2" ;; *) echo "error: invalid host: $2 (expected codex, cursor, or claude)" >&2; exit 2 ;; esac
+		[ $# -ge 2 ] || { echo "error: --host needs claude or codex" >&2; exit 2; }
+		case "$2" in claude|codex) host="$2" ;; *) echo "error: invalid host: $2 (expected claude or codex)" >&2; exit 2 ;; esac
 		shift 2 ;;
 	-h|--help) sed -n '2,/^set -u/p' "$0" | sed '$d; s/^# \{0,1\}//'; exit 0 ;;
 	-*) echo "error: unknown option: $1" >&2; exit 2 ;;
@@ -75,11 +75,12 @@ elif raw=$(gh pr list --author "@me" --state all --limit 1000 \
 fi
 [ -s "$prs" ] || echo "[]" > "$prs"
 
-transcripts=""
-if [ "$host" = cursor ]; then
-	slug=$(printf '%s' "$main_wt" | sed 's#^/##; s#/#-#g')
-	transcripts="$HOME/.cursor/projects/$slug/agent-transcripts"
-fi
+# Claude Code keeps a session, and its subagents' transcripts, under the slug
+# of the folder the session started in. A chat that touched a worktree can sit
+# under the main checkout's slug, another worktree's, or its own. Worktrees
+# under the main checkout share its slug as a prefix.
+projects="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects"
+slug() { printf '%s' "$1" | sed 's/[^A-Za-z0-9]/-/g'; }
 now=$(date +%s)
 
 echo "# base: $base"
@@ -120,14 +121,16 @@ git worktree list --porcelain | awk '/^worktree /{sub(/^worktree /, ""); print}'
 	# Most recent chat whose transcript operated in this worktree. Match path
 	# followed by "/" or a quote so glint-482 does not match glint-482-r37.
 	last="unknown"; last_ts=0; activity=unknown
-	if [ "$host" = cursor ]; then
+	if [ "$host" = claude ]; then
 		last="-"; activity=none-observed
-		if [ -d "$transcripts" ]; then
+		for transcripts in "$projects/$(slug "$main_wt")"* "$projects/$(slug "$wt")"; do
+			[ -d "$transcripts" ] || continue
 			f=$(rg -F -l -0 -e "${wt}/" -e "${wt}\"" "$transcripts" 2>/dev/null \
 				| xargs -0 stat "${stat_fmt[@]}" 2>/dev/null | sort -rn | head -1)
-			if [ -n "$f" ]; then last_ts=$(echo "$f" | awk '{print $1}')
-				last=$(fmt_day "$last_ts" 2>/dev/null); fi
-		fi
+			ts=$(echo "$f" | awk '{print $1}')
+			[ -n "$ts" ] && [ "$ts" -gt "$last_ts" ] && last_ts=$ts
+		done
+		[ "$last_ts" -gt 0 ] && last=$(fmt_day "$last_ts" 2>/dev/null)
 		if [ "$last_ts" -gt 0 ] 2>/dev/null && [ $(( (now - last_ts) / 86400 )) -le 4 ]; then
 			activity=recent
 		fi

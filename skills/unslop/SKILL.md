@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: Cut AI tells from any writing.
+description: "Cut AI tells from any writing. Use on every prose surface before it ships (a reply, PR description, commit message, doc, or skill), for /pstack:unslop, or when text reads as machine-written."
 ---
 
 # Unslop
