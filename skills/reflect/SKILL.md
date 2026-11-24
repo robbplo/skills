@@ -16,21 +16,21 @@ Before fanning out, find this conversation's transcript. Run `../poteto-mode/scr
 
 ## 2. Spawn three reviewers in parallel
 
-One message, three `Agent` calls with `subagent_type: "general-purpose"` and `isolation: "worktree"`. Reviewers look up the tickets, chat threads, and observability traces the transcript references through MCP. The worktree keeps any edit a reviewer makes out of your checkout.
+One message, three `Agent` calls with `subagent_type: "pstack:reflect-reviewer"`. The agent carries the rules every lens shares, has no edit tools, and runs in its own worktree, which keeps a shell write out of your checkout. Reviewers look up the tickets, chat threads, and observability traces the transcript references through MCP.
 
 Each reviewer and the synthesizer name a role line in the `../../config/claude-models.md` file and a default. Set `model` and `effort` from that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
-| Lens | Role line | Default `model` | Prompt template |
+| Lens | Role line | Default `model` | Lens brief |
 |---|---|---|---|
 | Judgment | `reflect judgment, divergent, synthesizer` | `opus xhigh` | `references/judgment-reviewer.md` |
 | Tooling | `reflect tooling` | `inherit-parent` | `references/tooling-reviewer.md` |
 | Divergent | `reflect judgment, divergent, synthesizer` | `opus xhigh` | `references/divergent-reviewer.md` |
 
-Pass each template verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the `Agent` response body.
+Pass each lens brief verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the `Agent` response body.
 
 ## 3. Synthesize
 
-One `Agent` call with `subagent_type: "general-purpose"`, `isolation: "worktree"`, and `model` from the `reflect judgment, divergent, synthesizer` line (default `opus xhigh`). It spot-verifies citations through MCP. Pass `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. It returns an Accepted / Rejected / Backlog list.
+One `Agent` call with `subagent_type: "pstack:reflect-synthesizer"` and `model` from the `reflect judgment, divergent, synthesizer` line (default `opus xhigh`). It spot-verifies citations through MCP. Pass `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. It returns an Accepted / Rejected / Backlog list.
 
 ## 4. Structural enforcement check
 
