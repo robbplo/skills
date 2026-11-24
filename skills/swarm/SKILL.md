@@ -7,7 +7,7 @@ description: "Fan out N parallel workers, drain them, and return one report. Use
 
 ## Start
 
-Open a todo list with one entry per phase before launching anything. Keep it with `mcp__ccd_turn__update_plan`, or with `TaskCreate` when the session lacks that tool.
+Open a todo list with one entry per phase before launching anything.
 
 1. Frame
 2. Fan out

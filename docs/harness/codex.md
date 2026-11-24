@@ -35,7 +35,7 @@ Never invent tool fields or claim an unavailable feature ran.
 - `Agent` means `spawn_agent` when available. Use only fields accepted by the
   current schema. Track returned IDs with `wait`, `send_input`, and `close_agent`
   as available. Otherwise execute the steps sequentially and disclose that.
-- Todo lists (`mcp__ccd_turn__update_plan`, `TaskCreate`, `TaskUpdate`) use `update_plan` when available, otherwise a checklist in replies.
+- Todo lists use `update_plan` when available, otherwise a checklist in replies.
 - `AskUserQuestion` means `request_user_input` only when available in the current
   mode; otherwise ask in plain text. Do not enter plan mode just to ask.
 - `anthropic-skills:skill-creator` means Codex's `skill-creator` if available.

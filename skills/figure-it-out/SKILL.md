@@ -9,7 +9,7 @@ When the task matches no playbook, design one. The deliverable before any code i
 
 ## Start
 
-Open a todo list whose first item is to read the Principles section of the **poteto-mode** skill. Keep it with `mcp__ccd_turn__update_plan`, or with `TaskCreate` when the session lacks that tool. Then add the phases below as todos.
+Open a todo list whose first item is to read the Principles section of the **poteto-mode** skill. Then add the phases below as todos.
 
 ## Phase A: Frame
 
