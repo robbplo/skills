@@ -9,9 +9,9 @@ export const meta = {
 }
 
 const input = typeof args === 'string' ? JSON.parse(args) : args
-const { scope, intent, patchPath, adversaries } = input || {}
+const { scope, intent, ref, patchPath, adversaries } = input || {}
 if (typeof scope !== 'string' || typeof intent !== 'string' || !Array.isArray(adversaries) || adversaries.length === 0) {
-  throw new Error('interrogate-run needs args {scope, intent, adversaries: [{label?, model?, effort?}], patchPath?}')
+  throw new Error('interrogate-run needs args {scope, intent, adversaries: [{label?, model?, effort?}], ref?, patchPath?}')
 }
 
 const FINDINGS = {
@@ -49,6 +49,7 @@ const labelOf = (adversary, index) => adversary.label || `adversary-${index + 1}
 const breakPrompt = [
   `Scope: ${scope}`,
   `Intent: ${intent}`,
+  ref ? `Your worktree starts on the default branch. Check out the change first with \`git checkout --detach ${ref}\`.` : '',
   patchPath ? `The scope includes uncommitted changes. Apply them first with \`git apply ${patchPath}\`.` : '',
   'Break this change. Prove each finding with a run against the real code, such as a failing test, a repro script, or command output that shows the wrong behavior. For a design or plan, run a prototype or probe the current tree. Keep repros in your own worktree. Report each finding with a title, the exact command, the output it printed, and the output the intent requires. Leave out anything you did not run. That covers style, naming, structure, and risks that need a future change to matter. No findings is a valid result.',
 ].filter(Boolean).join('\n\n')

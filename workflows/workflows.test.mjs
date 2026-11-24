@@ -89,7 +89,7 @@ test("arena skips the judge when none is configured or one candidate remains", a
 test("interrogate keeps only findings a rerun reproduces against the intent", async () => {
   const finding = (title) => ({ title, command: `run ${title}`, output: "bad", expected: "good" });
   const { out, calls } = await interrogate(
-    { scope: "the diff", intent: "sort is stable", patchPath: "/tmp/p.diff", adversaries: [{ label: "x", model: "opus" }, { label: "y" }, { label: "z" }] },
+    { scope: "the diff", intent: "sort is stable", ref: "abc123", patchPath: "/tmp/p.diff", adversaries: [{ label: "x", model: "opus" }, { label: "y" }, { label: "z" }] },
     async (prompt, opts) => {
       if (opts.phase === "Break") {
         if (opts.label === "z") throw new Error("died");
@@ -101,7 +101,7 @@ test("interrogate keeps only findings a rerun reproduces against the intent", as
     },
   );
   const breaker = calls.find((c) => c.opts.label === "x");
-  assert.match(breaker.prompt, /git apply \/tmp\/p\.diff/);
+  assert.match(breaker.prompt, /git checkout --detach abc123[\s\S]*git apply \/tmp\/p\.diff/);
   assert.equal(breaker.opts.isolation, "worktree");
   assert.match(calls.find((c) => c.opts.phase === "Verify").prompt, /Work in \/w\/x/);
   assert.deepEqual(out.findings.map((f) => [f.title, f.foundBy]), [["real", "x"]]);

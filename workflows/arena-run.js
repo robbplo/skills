@@ -9,9 +9,9 @@ export const meta = {
 }
 
 const input = typeof args === 'string' ? JSON.parse(args) : args
-const { task, grounding, candidates, rubric, judge } = input || {}
+const { task, grounding, ref, candidates, rubric, judge } = input || {}
 if (typeof task !== 'string' || !Array.isArray(candidates) || candidates.length === 0 || !Array.isArray(rubric) || rubric.length === 0) {
-  throw new Error('arena-run needs args {task, rubric: [criterion], candidates: [{label?, model?, effort?, outputPath?}], grounding?, judge?: {model?, effort?}}')
+  throw new Error('arena-run needs args {task, rubric: [criterion], candidates: [{label?, model?, effort?, outputPath?}], grounding?, ref?, judge?: {model?, effort?}}')
 }
 
 const CANDIDATE = {
@@ -56,7 +56,7 @@ const candidatePrompt = candidate => [
   grounding ? `Shared grounding: ${grounding}` : '',
   candidate.outputPath
     ? `Write the artifact under ${candidate.outputPath} and nowhere else.`
-    : 'You are in your own git worktree. Build the artifact there and commit it.',
+    : `You are in your own git worktree${ref ? `, which starts on the default branch. Check out the base first with \`git checkout --detach ${ref}\`` : ''}. Build the artifact there and commit it.`,
   'Report where the artifact is, what you built, and the alternatives you considered and rejected.',
 ].filter(Boolean).join('\n\n')
 
