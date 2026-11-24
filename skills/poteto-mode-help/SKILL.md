@@ -100,7 +100,7 @@ Close calls:
 
 Not in pstack:
 
-- `/loop` is Claude Code's skill and `anthropic-skills:skill-creator` is Anthropic's. Neither is a pstack skill. A `/loop` stops when the session ends, so save a checkpoint before then.
+- `/loop` is Claude Code's skill and `anthropic-skills:skill-creator` is Anthropic's. Neither is a pstack skill. A `/loop` stops when the session ends. `/schedule` runs a cloud agent that goes on with the laptop closed. [`wakes.md`](../poteto-mode/references/wakes.md) says which to use.
 - pstack has no `/orchestrate` skill. Orchestrate is a `/pstack:poteto-mode` playbook. If the slash menu shows it, another plugin provides it.
 
 ## Playbooks and principles
