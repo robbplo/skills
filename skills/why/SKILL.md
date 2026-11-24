@@ -1,6 +1,7 @@
 ---
 name: why
 description: "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCPs and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior."
+argument-hint: "[code or decision to explain]"
 ---
 
 # Why
@@ -9,7 +10,7 @@ Investigate the motivation and intent behind code. The companion `how` skill ans
 
 Each spawn below names a role line in the `../../config/claude-models.md` file and a default. Set `model` and `effort` from that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
-Every spawn uses `subagent_type: "general-purpose"` and `isolation: "worktree"`. The investigators and synthesizer check sources through MCP. The worktree keeps any edit they make out of your checkout. A worktree holds only committed code, so paste any uncommitted diff the question depends on into the brief.
+Investigators spawn as `subagent_type: "pstack:why-investigator"` and the synthesizer as `subagent_type: "pstack:why-synthesizer"`. Both agents carry their role, epistemic rules, and output format, so a brief holds only the filled-in template. They check sources through MCP, have no edit tools, and run in their own worktree, which keeps a shell write out of your checkout. A worktree holds only committed code, so paste any uncommitted diff the question depends on into the brief.
 
 ## Operating Posture
 
@@ -79,8 +80,9 @@ Spawn one synthesizer. `model`: the `why synthesizer` line, default `opus xhigh`
 1. The investigator findings, including any null results and any categories skipped with justification
 2. The code anchor
 3. The user's original question
-4. The epistemics framework from `references/epistemics.md`
-5. The synthesizer prompt template from `references/synthesizer-prompt.md`
+4. The full text of `references/epistemics.md`
+
+Fill these into `references/synthesizer-prompt.md`.
 
 ## Step 5. Present
 
@@ -88,7 +90,7 @@ Present the synthesizer's output to the user. You may lightly edit for clarity o
 
 ## Output Format
 
-The structure is the one in `references/synthesizer-prompt.md`: The Question, The Code in Question, What We Found, What We Can Reasonably Infer, Competing Hypotheses, What We Don't Know, Sources Consulted, Confidence Summary. Adapt as needed, but keep the confidence separation intact, and keep Sources Consulted as one line per investigator, including the ones that returned nothing or were skipped, with the reason.
+The structure is the one the synthesizer agent defines: The Question, The Code in Question, What We Found, What We Can Reasonably Infer, Competing Hypotheses, What We Don't Know, Sources Consulted, Confidence Summary. Adapt as needed, but keep the confidence separation intact, and keep Sources Consulted as one line per investigator, including the ones that returned nothing or were skipped, with the reason.
 
 After Sources Consulted, if the user's `why` question is a precursor to changing this code, convert the lineage findings into a Preserve / Change / Avoid / Risk constraint set for planning the change.
 

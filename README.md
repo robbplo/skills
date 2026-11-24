@@ -239,6 +239,8 @@ pstack also ships [`subagent_type: "poteto-agent"`](./agents/poteto-agent.md) as
 
 pstack also ships [Comment Sicko](./agents/comment-sicko.md), a read-only comment reviewer available as `subagent_type: "comment-sicko"`. usually invoke it through [`/no-comments`](./skills/no-comments/SKILL.md), not directly.
 
+six more agents carry the fixed role prompts of the skills that fan out: [`how-explorer`](./agents/how-explorer.md) and [`how-explainer`](./agents/how-explainer.md) for [`/how`](./skills/how/SKILL.md), [`why-investigator`](./agents/why-investigator.md) and [`why-synthesizer`](./agents/why-synthesizer.md) for [`/why`](./skills/why/SKILL.md), and [`reflect-reviewer`](./agents/reflect-reviewer.md) and [`reflect-synthesizer`](./agents/reflect-synthesizer.md) for [`/reflect`](./skills/reflect/SKILL.md). none of them has an edit tool. the skills spawn them, so you do not call them directly.
+
 ## principles
 
 twenty-four short skills, one principle each. `poteto-mode` indexes them inline and reads that index at task start. the standalone files are there so other skills can reference a principle by name, and so the index can point at the full rule for each.
