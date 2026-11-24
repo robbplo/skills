@@ -18,15 +18,13 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 ## Phase B: Fan out
 
-Run Phases B and C with the `Workflow` tool, running the `pstack:arena-run` workflow. If that name does not resolve, pass `scriptPath: "${CLAUDE_PLUGIN_ROOT}/workflows/arena-run.js"`. Pass `args: {task, grounding, ref, rubric, candidates: [{label, model, effort, outputPath}], judge: {model, effort}}`. A worktree starts on the default branch, so set `ref` to the commit the candidates build on whenever that is not the default branch. Each candidate gets the task and the grounding, never the rubric, and works in its own git worktree unless you give it an `outputPath`. It reports where its artifact is and a rationale naming the alternatives it considered and what it rejected. Pick `judge` per Phase C, and leave it out when no pool entry qualifies. The workflow returns `{candidates, dropouts, verdict}`.
+Spawn all N subagents in one message. Give each the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected.
 
-When the session has no `Workflow` tool, or the user declines the run, spawn all N subagents in one message with `Agent`, with the same task, grounding, output location, and report, then run Phase C by hand.
-
-If a candidate is in `dropouts` or produced no output, proceed with N-1 and note the dropout.
+If a candidate produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-Choose one model from the `arena cross-judge pool` line in `../../config/claude-models.md`. If the file or that line is missing, choose from `opus xhigh` and `inherit-parent`. The judge is never on the parent's model. An `auto` or `inherit-parent` entry is the parent model, so it never judges. Claude Code offers only Claude models, so the judge cannot come from another family. Try the pool entries whose model differs from the parent's, in pool order, and say that the judge shares the parent's family. If the Agent tool rejects an entry, move to the next one. If no entry runs, or `verdict` comes back null, skip the judge, pick the base alone in Phase D, and say so. The workflow starts the judge as `Explore` once every candidate has finished. It sees the rubric and the candidates by label and location, scores each criterion from 1 to 5, and recommends a base with rationale. Check `git status` afterward. Without the workflow, spawn the same judge yourself, and never while candidates are still writing.
+After all Phase B candidates complete, choose one model from the `arena cross-judge pool` line in `../../config/claude-models.md`. If the file or that line is missing, choose from `opus xhigh` and `inherit-parent`. The judge is never on the parent's model. An `auto` or `inherit-parent` entry is the parent model, so it never judges. Claude Code offers only Claude models, so the judge cannot come from another family. Try the pool entries whose model differs from the parent's, in pool order, and say that the judge shares the parent's family. If the Agent tool rejects an entry, move to the next one. If no entry runs, skip the judge, pick the base alone in Phase D, and say so. Spawn the judge as `Explore`. Tell it not to edit files and check `git status` afterward. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with your reading in Phase D. Don't spawn it while candidates are still writing.
 
 ## Phase D: Pick a base
 

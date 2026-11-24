@@ -26,8 +26,6 @@ claude code leaves auto-update off for third-party marketplaces. to turn it on, 
 
 claude code prefixes plugin commands and agents, so `/poteto-mode` is `/pstack:poteto-mode`. claude code reads model choices from [`config/claude-models.md`](./config/claude-models.md).
 
-beside the skills, the plugin installs two [hooks](./hooks/hooks.json) and three [workflows](./workflows/). the hooks deny a search across every project's transcripts and ask before a force-push to trunk. `swarm`, `arena`, and `interrogate` each run through their own workflow, and fall back to plain subagents when you decline it.
-
 ## local Codex install
 
 ```bash
