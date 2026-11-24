@@ -293,12 +293,6 @@ type [`/automate-me`](./skills/automate-me/SKILL.md). it mines your recent trans
 
 models are configurable too. fork the repo, edit the role lines in [`config/claude-models.md`](./config/claude-models.md) or [`config/codex-models.md`](./config/codex-models.md), and install your fork. every skill reads them and falls back to sensible defaults when a line is absent, so you override only what you want.
 
-## automations
-
-pstack also ships a dormant [benny automation pack](./automations/benny/). benny triages slack issue reports, then reproduces and fixes confirmed bugs with real ui evidence. its files are not registered as slash skills.
-
-to set it up, point cursor at [`FOR_AGENTS.md`](./automations/benny/FOR_AGENTS.md). setup copies the pack into the target repository at `.cursor/automations/benny/`, enables pstack there for shared skills, and keeps user configuration outside the copied pack. benny runs on cursor automations, so it is cursor-only.
-
 ## license
 
 MIT

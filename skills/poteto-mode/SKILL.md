@@ -1,8 +1,6 @@
 ---
 name: poteto-mode
 description: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /pstack:poteto-mode, or requests to work in this style.
-icon: crown
-color: yellow
 ---
 
 # Poteto mode

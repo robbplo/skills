@@ -140,7 +140,7 @@ class WorktreeAuditTests(unittest.TestCase):
         self.assertEqual(row['LAST_CHAT'], 'unknown')
 
     def test_invalid_or_missing_host_is_a_usage_error(self):
-        for args in (('--host', 'cursor'), ('--host',)):
+        for args in (('--host', 'unknown'), ('--host',)):
             result = self.audit(*args)
             self.assertEqual(result.returncode, 2)
             self.assertIn('host', result.stderr)

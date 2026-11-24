@@ -71,7 +71,7 @@ def render_pack(stage: Path, pack: Path):
     for name, (front, body) in parsed.items():
         explicit_only = 'disable-model-invocation: true' in front
         front = '\n'.join(line for line in front.splitlines() if not line.startswith(
-            ('disable-model-invocation:', 'user-invocable:', 'icon:', 'color:')))
+            ('disable-model-invocation:', 'user-invocable:')))
         dest = stage / 'skills' / name / 'SKILL.md'
         body = body.replace(CLAUDE_MODELS, CODEX_MODELS)
         dest.write_text('---\n' + front + '\n---\n\n' + prelude + body.lstrip())

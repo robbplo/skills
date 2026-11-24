@@ -106,7 +106,7 @@ test("defaults to the Claude Code host", () => {
 });
 
 test("rejects missing, unknown, and repeated hosts before reading the plan", () => {
-	for (const args of [["--host", "unknown"], ["--host"], ["--host", "codex", "--host", "claude"], ["--host", "cursor"]]) {
+	for (const args of [["--host", "unknown"], ["--host"], ["--host", "codex", "--host", "claude"]]) {
 		const result = runPlan("", 2, validPlan, args);
 		expect(result.stderr).toContain("Usage:");
 	}
