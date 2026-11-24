@@ -23,19 +23,21 @@ Open a todo list with one entry per phase before launching anything.
 
 ## Phase B: Fan out
 
-Fan out with the `Workflow` tool, running the `pstack:fan-out` workflow with `args: {briefs: [...]}`. If that name does not resolve, pass `scriptPath: "${CLAUDE_PLUGIN_ROOT}/workflows/fan-out.js"`. Each brief is `{label, prompt, model, effort, isolation}`, and only `prompt` is required. The workflow runs every brief at once as a `general-purpose` agent, retries a dropout once, and returns `{results: [{label, report}], gaps}`. Give each brief `isolation: "worktree"` and the step 3 model, left unset for `auto` or `inherit-parent`. Omit isolation when the worker needs access to something on the user's computer.
+Fan out with the `Workflow` tool, running the `pstack:swarm-run` workflow. If that name does not resolve, pass `scriptPath: "${CLAUDE_PLUGIN_ROOT}/workflows/swarm-run.js"`. Pass `args: {briefs: [{label, prompt, model, effort, isolation, mustRecord}]}`, one brief per worker. Give each brief `isolation: "worktree"` and the step 3 model, left unset for `auto` or `inherit-parent`. Omit isolation when the worker needs access to something on the user's computer. Put the exact SHAs and the method name a brief requires in its `mustRecord` list.
 
-When the session has no `Workflow` tool, or the user declines the run, spawn all N workers in one message with `Agent`, `subagent_type: "general-purpose"`, and the same fields.
+The workflow makes every worker report `PASS`, `ISSUES`, or `BLOCKED` with evidence. It respawns once any worker that returns nothing or leaves out a `mustRecord` entry, and returns `{results, gaps}`.
+
+When the session has no `Workflow` tool, or the user declines the run, spawn all N workers in one message with `Agent`, `subagent_type: "general-purpose"`, and the same fields. Then respawn once, by hand, any worker whose result lacks the SHAs and method its brief names.
 
 When a worker must start from a non-default pushed branch, name the branch or commit to check out in its brief.
 
 Every brief stands alone. Include the goal, scope, exact slice or race arm, how to verify, and what to report. Reports use `PASS`, `ISSUES`, or `BLOCKED` with evidence. A worker that can prove a defect reports `ISSUES` and lists every issue it can prove, not only the first.
 
-A label in `gaps` dropped out twice. Proceed with N-1 and note it.
+A worker in `gaps` missed twice. Proceed with N-1 and note it.
 
 ## Phase C: Aggregate
 
-Read the terminal results. Drop a result that does not record the SHAs and method its brief names, and respawn that worker once with `Agent`. After a second miss, record a gap. A gap does not count as a pass. For coverage, every required slice needs a result. For a race, apply the selection rule declared up front. Use first pass, rank all, or best-of. Do not paste raw worker dumps.
+Read the results. A gap does not count as a pass. For coverage, every required slice needs a result. For a race, apply the selection rule declared up front. Use first pass, rank all, or best-of. Do not paste raw worker dumps.
 
 ## Phase D: Report
 
