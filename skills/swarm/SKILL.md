@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 ## Start
 
-Open a todolist with one entry per phase before launching anything.
+Open a todo list with one entry per phase before launching anything. Keep it with `mcp__ccd_turn__update_plan`, or with `TaskCreate` when the session lacks that tool.
 
 1. Frame
 2. Fan out

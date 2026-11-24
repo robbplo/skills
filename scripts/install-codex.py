@@ -65,7 +65,7 @@ def render_pack(stage: Path, pack: Path):
     (stage / MARKER).write_text(f'Source: {SOURCE}\n')
     adapter = pack / 'docs/harness/codex.md'
     prelude = (f'## Codex host instructions\n\nBefore doing any work, read `{adapter}` '
-               'and apply its host mappings instead of Cursor/Claude-specific instructions below. '
+               'and apply its host mappings instead of the Claude Code instructions below. '
                f'Read `{pack / "models.md"}`. '
                'Pass this adapter path to every delegate.\n\n')
     for name, (front, body) in parsed.items():
