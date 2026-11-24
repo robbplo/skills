@@ -22,7 +22,7 @@ class InstallCodexTest(unittest.TestCase):
         (self.source / 'docs/harness/codex.md').write_text('Codex adapter.\n')
         (self.source / 'README.md').write_text('Bundled setup help.\n')
         (self.source / 'config/codex-models.md').write_text('how explorer: inherit-parent\n')
-        self.write_skill('alpha')
+        self.write_skill('alpha', '---\nname: alpha\ndescription: "Use alpha."\ndisable-model-invocation: true\n---\n\n# alpha\n\nroot ${CLAUDE_PLUGIN_ROOT} dir ${CLAUDE_SKILL_DIR}\n')
         self.write_skill('obsolete')
 
     def write_skill(self, name, text=None):
@@ -88,6 +88,8 @@ class InstallCodexTest(unittest.TestCase):
         self.assertEqual((self.pack / 'README.md').read_text(), 'Bundled setup help.\n')
         skill = (self.pack / 'skills/alpha/SKILL.md').read_text()
         self.assertIn(str(self.pack / 'docs/harness/codex.md'), skill)
+        self.assertIn(f"dir {(self.pack / 'skills/alpha').resolve()}", skill)
+        self.assertNotIn('${CLAUDE_', skill)
         self.assertTrue((self.catalog / 'alpha').samefile(self.pack / 'skills/alpha'))
         self.assertEqual((self.pack / 'skills/alpha/agents/openai.yaml').read_text(), 'policy:\n  allow_implicit_invocation: false\n')
 

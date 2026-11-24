@@ -12,13 +12,7 @@ Invoke when the user says "reflect" or "/pstack:reflect". Skip when the conversa
 
 ## 1. Locate the active transcript
 
-Before fanning out, find this conversation's transcript under `~/.claude/projects/<slug>/`, where the slug replaces every character of the workspace path that is not a letter or digit with `-`. Read only this workspace's folder.
-
-```bash
-find ~/.claude/projects/<slug> -maxdepth 1 -name '*.jsonl' -type f
-```
-
-Use a session ID supplied by the host when available. Otherwise inspect user-message records in the candidate files and match this conversation's opening user prompt and later context. Do not choose by modification time alone, and do not assume the first JSONL record is a user message. If no file matches uniquely, pass a tight digest of this session instead. A matched session's `<session>/subagents/` folder holds its subagent transcripts.
+Before fanning out, find this conversation's transcript. Run `../poteto-mode/scripts/transcript-dir.sh` for this workspace's transcript folder. This session's file there is `${CLAUDE_SESSION_ID}.jsonl`. If that name still shows a `${...}` placeholder or the file is missing, inspect user-message records in the folder's `.jsonl` files and match this conversation's opening user prompt and later context. Do not choose by modification time alone, and do not assume the first JSONL record is a user message. If no file matches uniquely, pass a tight digest of this session instead. A matched session's `<session>/subagents/` folder holds its subagent transcripts.
 
 ## 2. Spawn three reviewers in parallel
 

@@ -74,6 +74,7 @@ def render_pack(stage: Path, pack: Path):
             ('disable-model-invocation:', 'user-invocable:')))
         dest = stage / 'skills' / name / 'SKILL.md'
         body = body.replace(CLAUDE_MODELS, CODEX_MODELS)
+        body = body.replace('${CLAUDE_PLUGIN_ROOT}', str(pack)).replace('${CLAUDE_SKILL_DIR}', str(pack / 'skills' / name))
         dest.write_text('---\n' + front + '\n---\n\n' + prelude + body.lstrip())
         if explicit_only:
             metadata = dest.parent / 'agents' / 'openai.yaml'

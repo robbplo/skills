@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
-CLAUDE_CODE_SKILLS = {"loop"}
+CLAUDE_CODE_SKILLS = {"loop", "schedule"}
 SAMPLE_DIRS = ("create-verification-skill/references/feature-map-example",)
 SKILL_FOLDER_PREFIXES = ("playbooks/", "references/", "scripts/", "assets/", "../", "./")
 FENCE = re.compile(r"^[ \t]*`{3,}.*$", re.M)
