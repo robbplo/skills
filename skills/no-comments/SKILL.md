@@ -1,7 +1,6 @@
 ---
 name: no-comments
-description: "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
-disable-model-invocation: true
+description: "Spawn Comment Sicko over a diff, fix accepted findings, and offer encodings for claimed constraints. Use before requesting review, for /pstack:no-comments, or when asked to strip or audit code comments."
 ---
 
 # No comments

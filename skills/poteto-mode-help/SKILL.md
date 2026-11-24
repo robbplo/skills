@@ -1,7 +1,6 @@
 ---
 name: poteto-mode-help
 description: Guides users through pstack setup, /pstack:poteto-mode, and picking the skill, playbook, or principle for a task. Type /pstack:poteto-mode-help with a question.
-disable-model-invocation: true
 ---
 
 # Poteto help

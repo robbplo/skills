@@ -1,7 +1,6 @@
 ---
 name: ship-pr
 description: "Take a finished branch from code-complete to merged: sync with the base branch, review and fix, have an independent subagent prove it, push, watch CI, merge on the user's word, then file open questions and deploy steps. Use for /ship-pr, or when the user says ship, land, get this merged, or merge the PR once CI passes."
-disable-model-invocation: true
 ---
 
 # Ship a PR

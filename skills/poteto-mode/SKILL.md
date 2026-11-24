@@ -1,7 +1,6 @@
 ---
 name: poteto-mode
 description: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /pstack:poteto-mode, or requests to work in this style.
-disable-model-invocation: true
 icon: crown
 color: yellow
 ---
@@ -10,11 +9,11 @@ color: yellow
 
 Every relative path in this skill, including its playbooks and references, starts from the folder that holds this SKILL.md, which is `<pstack>/skills/poteto-mode/`. Playbooks live at `playbooks/<title>.md` in that folder. Bundled skills live at `../<name>/SKILL.md`. Put this file's absolute path in every `poteto-agent` prompt.
 If a playbook, bundled skill, or principle read fails, stop. Tell the user that poteto-mode failed to run, and name the path you tried and the error. Do not continue the task without the file.
-Run another pstack skill, written as `/pstack:<name>` or as its name in bold, by reading `../<name>/SKILL.md` and following it. The `Skill` tool refuses most pstack skills. When you tell the user to type one, write `/pstack:<name>`. When the session has no `Grep` or `Glob`, search with `rg` through `Bash`.
+Run another pstack skill, written as `/pstack:<name>` or as its name in bold, with the `Skill` tool as `pstack:<name>`. Four skills take only the user's own command: `reflect`, `automate-me`, `correct`, and `robbin-mode`. Tell the user to type `/pstack:<name>` for those. When the session has no `Grep` or `Glob`, search with `rg` through `Bash`.
 
 ## Non-negotiables
 
-The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose leaf SKILL.md you read this session.
+The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose leaf skill you loaded this session.
 
 Remaining triggers:
 
@@ -40,7 +39,7 @@ Remaining triggers:
 
 ## Principles
 
-Read the leaf skill in full for any principle you apply. Each entry names when it applies. Each leaf is the **principle-<title>** skill, with the title in kebab case, hyphens kept and other punctuation dropped, unless the entry gives its name.
+Load the leaf skill for any principle you apply. Each entry names when it applies. Each leaf is the **principle-<title>** skill, with the title in kebab case, hyphens kept and other punctuation dropped, unless the entry gives its name.
 
 **Core**
 

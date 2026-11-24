@@ -1,6 +1,6 @@
 ---
 name: deslop
-description: Remove AI-generated code slop and clean up code style
+description: "Remove AI-generated code slop from a diff and clean up its style. Use before every commit of agent-written code, for /pstack:deslop, or when asked to clean up, tidy, or de-slop a change."
 ---
 
 # Remove AI code slop
