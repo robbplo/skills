@@ -36,7 +36,6 @@ Never invent tool fields or claim an unavailable feature ran.
   current schema. Track returned IDs with `wait`, `send_input`, and `close_agent`
   as available. Otherwise execute the steps sequentially and disclose that.
 - Todo lists use `update_plan` when available, otherwise a checklist in replies.
-- The `Workflow` tool and the `pstack:*-run` workflows do not exist in Codex. Take each skill's fallback path and spawn the agents directly.
 - `AskUserQuestion` means `request_user_input` only when available in the current
   mode; otherwise ask in plain text. Do not enter plan mode just to ask.
 - `anthropic-skills:skill-creator` means Codex's `skill-creator` if available.

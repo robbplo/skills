@@ -12,17 +12,17 @@ Adversaries try to break a change or a design. A finding survives only when a ru
 
 The scope is what the user names. Otherwise it is the branch diff from its merge base with the base branch, through the working tree. State the intent with the **in-your-own-words** skill, from the user's message, the commits, and the PR description. Ask the user when the intent is unclear.
 
-## Fan out and verify
+## Fan out
 
-Pick the adversaries per Phase A step 3 of the **arena** skill, reading the `interrogate reviewers` line in place of `arena runners`. When the scope has uncommitted changes, write them to a patch file with `git diff HEAD` and note its absolute path.
-
-Run the adversaries with the `Workflow` tool, running the `pstack:interrogate-run` workflow. If that name does not resolve, pass `scriptPath: "${CLAUDE_PLUGIN_ROOT}/workflows/interrogate-run.js"`. Pass `args: {scope, intent, ref, patchPath, adversaries: [{label, model, effort}]}`. A worktree starts on the default branch, so set `ref` to the commit under review whenever the scope is not on that branch. Each adversary works in its own worktree with the brief below. A fresh agent then reruns every finding's command in that worktree, and a finding survives only when the rerun shows the failure and the failure breaks the intent. The workflow returns `{findings, dropped, gaps}`.
-
-When the session has no `Workflow` tool, or the user declines the run, run Phase B of the **arena** skill with `subagent_type: "general-purpose"`, copy the uncommitted changes into each worktree, give each adversary the scope, the intent, and this brief, wait for every result, and rerun each finding's command yourself:
+Run Phase A steps 3 and 4 and Phase B of the **arena** skill, with four changes. Read the `interrogate reviewers` line in place of `arena runners`. Copy the scope's uncommitted changes into each worktree. Spawn each adversary with `subagent_type: "general-purpose"`, and wait for every adversary's result before you verify. In place of the arena task and rationale, give each adversary the scope, the intent, and this brief:
 
 > Break this change. Prove each finding with a run against the real code, such as a failing test, a repro script, or command output that shows the wrong behavior. For a design or plan, run a prototype or probe the current tree. Keep repros in your own worktree. Report each finding with a title, the exact command, the output it printed, and the output the intent requires. Leave out anything you did not run. That covers style, naming, structure, and risks that need a future change to matter. No findings is a valid result.
 
-Merge the surviving findings that share a root cause. Adversaries find different failures, so the verdict keeps every verified finding, not one adversary's list. Arena's cross-judge, base pick, and graft do not apply.
+## Verify
+
+Verify each finding per arena Phase F by rerunning its command. Keep a finding when the output shows the failure and the failure breaks the intent. Drop the rest. Merge findings that share a root cause.
+
+Skip arena Phases C, D, and E. Adversaries find different failures, so the verdict keeps every verified finding, not one adversary's list.
 
 ## Output
 
