@@ -8,7 +8,7 @@ pstack skills use Claude Code names by default, but some bundled playbooks and r
 | --- | --- |
 | `Task` | `Agent` |
 | `AskQuestion` | `AskUserQuestion`. |
-| Open a todolist | Use `TaskCreate`, which needs to be loaded using `ToolSearch`. Otherwise keep the list in your reply and update it at each phase. |
+| Open a todolist | Use `TaskCreate` and `TaskUpdate`, loaded together with `ToolSearch` (`select:TaskCreate,TaskUpdate`). Change an item's status with `TaskUpdate` at every step change. Otherwise keep the list in your reply and update it at each phase. |
 | Run another pstack skill (`/name`, `/pstack:name`, or "the **name** skill") | Strip `pstack:` from the name, then `Read` `<pstack>/skills/<name>/SKILL.md` and follow it. The `Skill` tool refuses most pstack skills. When you tell the user to type it, write `/pstack:<name>`. |
 | `Grep`, `Glob` | `Bash` with `rg` when the session has no `Grep` or `Glob`. |
 | The `create-skill` skill | Run the `/skill-creator` skill. It is not a pstack file. |
@@ -73,4 +73,4 @@ Claude Code has no Cursor Automations, Bugbot, Cursor cloud agents, or built-in 
 | Cursor Automations: routines, `update_state` routine calls, `api2.cursor.sh/automations` webhooks, routine wakes, and `SendToUser` secret requests | Skip with the line. |
 | Bugbot | Bugbot comments on a GitHub PR are ordinary review threads, so triage them with the forge command that the step gives. Skip a step that starts, waits for, or configures Bugbot when the PR has no Bugbot check or comment. |
 | Cursor cloud agents | `environment: "cloud"` maps to a worktree, as in Subagent fields. Skip a step that needs the cloud agent itself, such as its dashboard status or its own machine. |
-| A built-in PR tool | Use the forge command that the step gives, such as `gh pr create`. That is not a skip, so write no line. |
+| A built-in PR tool | Use the forge command that the step gives, such as `gh pr create`. That is not a skip, so write no line. When the host session instructs draft PRs, the host rule wins over the playbook's Readiness paragraph. Name the conflict in your reply, and mark the PR ready only when the user asks. |
