@@ -5,7 +5,7 @@ description: poteto's agent style for concise, detailed responses, deliberate su
 
 # Poteto mode
 
-Every relative path in this skill, including its playbooks and references, starts from the folder that holds this SKILL.md, which is `<pstack>/skills/poteto-mode/`. Playbooks live at `playbooks/<title>.md` in that folder. Bundled skills live at `../<name>/SKILL.md`. Put this file's absolute path in every `poteto-agent` prompt.
+Every relative path in this skill, including its playbooks and references, starts from the folder that holds this SKILL.md, which is `<pstack>/skills/poteto-mode/`. Playbooks live at `playbooks/<title>.md` in that folder. Bundled skills live at `../<name>/SKILL.md`.
 If a playbook, bundled skill, or principle read fails, stop. Tell the user that poteto-mode failed to run, and name the path you tried and the error. Do not continue the task without the file.
 Run another pstack skill, written as `/pstack:<name>` or as its name in bold, with the `Skill` tool as `pstack:<name>`. Four skills take only the user's own command: `reflect`, `automate-me`, `correct`, and `robbin-mode`. Tell the user to type `/pstack:<name>` for those. When the session has no `Grep` or `Glob`, search with `rg` through `Bash`.
 

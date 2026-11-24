@@ -9,7 +9,7 @@ Investigate the motivation and intent behind code. The companion `how` skill ans
 
 Each spawn below names a role line in the `../../config/claude-models.md` file and a default. Set `model` and `effort` from that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a configured model or effort, use the role default and say so. Pick each subagent's effort for the job, per the Subagents section of the **poteto-mode** skill.
 
-Every spawn uses `subagent_type: "general-purpose"`. The investigators and synthesizer check sources through MCP. Tell each one not to edit any file.
+Every spawn uses `subagent_type: "general-purpose"` and `isolation: "worktree"`. The investigators and synthesizer check sources through MCP. The worktree keeps any edit they make out of your checkout. A worktree holds only committed code, so paste any uncommitted diff the question depends on into the brief.
 
 ## Operating Posture
 
