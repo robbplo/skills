@@ -18,9 +18,9 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 ## Phase B: Fan out
 
-Spawn all N subagents in one message. Give each the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected.
+Fan out with the `Workflow` tool, running the `pstack:fan-out` workflow with `args: {briefs: [...]}`. If that name does not resolve, pass `scriptPath: "${CLAUDE_PLUGIN_ROOT}/workflows/fan-out.js"`. Each brief is `{label, prompt, model, effort, isolation}`, and only `prompt` is required. The workflow runs every brief at once as a `general-purpose` agent, retries a dropout once, and returns `{results: [{label, report}], gaps}`. When the session has no `Workflow` tool, or the user declines the run, spawn all N subagents in one message with `Agent`. Give each the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected.
 
-If a candidate produces no output, proceed with N-1 and note the dropout.
+If a candidate lands in `gaps` or produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
