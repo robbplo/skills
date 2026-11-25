@@ -10,7 +10,7 @@ Sketch types, function signatures, class shapes, and module boundaries with `not
 
 ## Start
 
-Add one todo per phase before starting. When this skill runs as part of another todo list, place the phases by the todo-list rules in the Playbooks section of the **poteto-mode** skill. When a later step of the caller implements, such as step 4 of the Feature playbook, mark Implement `skip: done by step <N>` and add Scrap as a sub-item of that step. If Scrap fires, reopen the Sketch item and its step.
+Phases are todo items only when this skill runs alone. Run by a playbook step, show the current phase in that step's subject, per the Playbooks section of the **poteto-mode** skill. When a later step of the caller implements, as Feature step 4 does, stop after Agree, and reopen this step if Scrap fires.
 
 1. Ground
 2. Sketch
