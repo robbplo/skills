@@ -6,7 +6,7 @@ argument-hint: "[task]"
 
 # Arena
 
-Open a todo list with one entry per phase (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything.
+Phases (Frame, Fan out, Cross-judge, Pick, Graft, Verify) are todo items only when this skill runs alone. Run by a playbook step, show the current phase in that step's subject, per the Playbooks section of the **poteto-mode** skill.
 
 ## Phase A: Frame
 

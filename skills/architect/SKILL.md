@@ -10,7 +10,7 @@ Sketch types, function signatures, class shapes, and module boundaries with `not
 
 ## Start
 
-Open a todo list with one entry per phase before starting.
+Phases are todo items only when this skill runs alone. Run by a playbook step, show the current phase in that step's subject, per the Playbooks section of the **poteto-mode** skill. When a later step of the caller implements, as Feature step 4 does, stop after Agree, and reopen this step if Scrap fires.
 
 1. Ground
 2. Sketch
