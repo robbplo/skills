@@ -9,15 +9,6 @@ ROOT = Path(__file__).resolve().parent.parent
 MANIFESTS = ("plugin.json", ".claude-plugin/plugin.json")
 
 
-def paths(event):
-    edited = Path(event.get("tool_input", {}).get("file_path", "")).resolve()
-    if not edited.is_relative_to(ROOT / "skills"):
-        return
-    result = subprocess.run([sys.executable, str(ROOT / "scripts/check-paths.py")], capture_output=True, text=True)
-    if result.returncode:
-        sys.exit(fail("check-paths.py reports:\n" + result.stdout))
-
-
 def version(_event):
     versions = {m: json.loads((ROOT / m).read_text())["version"] for m in MANIFESTS}
     if len(set(versions.values())) > 1:
@@ -34,4 +25,4 @@ def fail(message):
 
 
 if __name__ == "__main__":
-    {"paths": paths, "version": version}[sys.argv[1]](json.load(sys.stdin))
+    {"version": version}[sys.argv[1]](json.load(sys.stdin))

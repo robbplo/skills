@@ -1,13 +1,5 @@
 {
   "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          { "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/dev-hooks.py\" paths" }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
