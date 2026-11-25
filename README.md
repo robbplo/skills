@@ -117,7 +117,7 @@ morning.
 
 when invoked it:
 
-1. matches your task to a [playbook](./skills/poteto-mode/playbooks/) and opens a todo list whose first items are its steps. phases of skills a step runs go in under that step.
+1. matches your task to a [playbook](./skills/poteto-mode/playbooks/) and opens a todo list of its steps. the running step shows what runs inside it after its name.
 2. routes to the other skills as the steps fire.
 3. writes unslopped replies framed for the consumer and the maintainer.
 
