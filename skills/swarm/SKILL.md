@@ -8,7 +8,7 @@ argument-hint: "[task to fan out]"
 
 ## Start
 
-Open a todo list with one entry per phase before launching anything.
+Add one todo per phase before launching anything. When this skill runs as part of another todo list, place the phases by the todo-list rules in the Playbooks section of the **poteto-mode** skill.
 
 1. Frame
 2. Fan out

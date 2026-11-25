@@ -6,7 +6,7 @@ argument-hint: "[task]"
 
 # Arena
 
-Open a todo list with one entry per phase (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything.
+Add one todo per phase (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything. When this skill runs as part of another todo list, place the phases by the todo-list rules in the Playbooks section of the **poteto-mode** skill.
 
 ## Phase A: Frame
 
